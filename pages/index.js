@@ -1,4 +1,4 @@
-// The Offer Company Website – Mobile-Optimized with Dark Theme and Microphone Icon
+// The Offer Company Website – Mobile-Optimized with Dark Theme and Microphone Icon + Animations
 
 import { useEffect, useState } from 'react';
 
@@ -43,16 +43,55 @@ export default function HomePage() {
       backgroundImage: 'linear-gradient(to bottom, #1a1a1a 0%, #333333 100%)'
     }}>
 
+      <style>{`
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.06); }
+          100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+          animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .pulse-button {
+          animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 600px) {
+          h1 {
+            font-size: 28px !important;
+          }
+
+          p {
+            font-size: 16px !important;
+          }
+        }
+      `}</style>
+
       {/* Hero Section */}
       <section style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 20px' }}>
-        <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
+        <div className="fade-in" style={{ display: 'flex', justifyContent: 'center' }}>
+          <img
+            src="/hope-avatar.jpg"
+            alt="Hope Assistant"
+            style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '20px', objectFit: 'cover' }}
+          />
+        </div>
+        <h1 className="fade-in" style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
           Facing Foreclosure? Meet Hope – Your Personal Real Estate Assistant.
         </h1>
-        <p style={{ fontSize: '20px', marginBottom: '32px', lineHeight: '1.6', color: '#ccc' }}>
+        <p className="fade-in" style={{ fontSize: '20px', marginBottom: '32px', lineHeight: '1.6', color: '#ccc' }}>
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </p>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="fade-in" style={{ display: 'flex', justifyContent: 'center' }}>
           <button 
+            className="pulse-button"
             style={{
               backgroundColor: '#3b82f6',
               color: 'white',
@@ -80,7 +119,7 @@ export default function HomePage() {
             Talk to Hope Now
           </button>
         </div>
-        <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
+        <p className="fade-in" style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
           No typing needed—just speak naturally and Hope will guide you.
         </p>
       </section>
