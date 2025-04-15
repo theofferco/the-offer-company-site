@@ -55,7 +55,7 @@ export default function HomePage() {
             onClick={startHopeCall}
           >
             <img 
-              src="/mnt/data/image.jpg" 
+              src="/hope-avatar.jpg" 
               alt="Hope Avatar" 
               style={{ width: '32px', height: '32px', borderRadius: '50%' }} 
             />
