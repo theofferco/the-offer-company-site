@@ -1,12 +1,30 @@
-// The Offer Company Website – Mobile-Optimized with Dark Theme and Hope Image
+// The Offer Company Website – Mobile-Optimized with Dark Theme and Microphone Icon
+
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  async function startHopeCall() {
-    try {
-      const { RetellWebClient } = await import("retell-client-js-sdk");
-      const retellWebClient = new RetellWebClient();
+  const [retellClient, setRetellClient] = useState(null);
 
-      await retellWebClient.startCall({
+  useEffect(() => {
+    async function loadRetell() {
+      try {
+        const sdk = await import("retell-client-js-sdk");
+        const client = new sdk.RetellWebClient();
+        setRetellClient(client);
+      } catch (err) {
+        console.error("Failed to load Retell SDK:", err);
+      }
+    }
+    loadRetell();
+  }, []);
+
+  async function startHopeCall() {
+    if (!retellClient) {
+      console.error("Retell client not ready");
+      return;
+    }
+    try {
+      await retellClient.startCall({
         agentId: "agent_950e5e1078a753c71cfe3fd35e",
       });
     } catch (error) {
@@ -55,9 +73,9 @@ export default function HomePage() {
             onClick={startHopeCall}
           >
             <img 
-              src="/hope-avatar.jpg" 
-              alt="Hope Avatar" 
-              style={{ width: '32px', height: '32px', borderRadius: '50%' }} 
+              src="https://img.icons8.com/ios-filled/50/ffffff/microphone.png" 
+              alt="Microphone Icon" 
+              style={{ width: '20px', height: '20px' }} 
             />
             Talk to Hope Now
           </button>
