@@ -1,4 +1,4 @@
-
+// Triggering redeploy on Vercel
 import Head from 'next/head';
 import Script from 'next/script';
 import styles from '../styles/Home.module.css';
