@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Retell from 'retell-sdk'; // Static import instead of dynamic
+import Retell from 'retell-sdk'; // Static import
 
 export default function HomePage() {
   const [retellClient, setRetellClient] = useState(null);
@@ -12,18 +12,14 @@ export default function HomePage() {
     function loadRetell() {
       try {
         console.log("Initializing Retell client...");
+        if (!process.env.NEXT_PUBLIC_RETELL_API_KEY) {
+          throw new Error("Retell API key is not set in environment variables.");
+        }
         const client = new Retell({
           apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
         });
-        console.log("Retell client initialized:", client);
+        console.log("Retell client initialized successfully:", client);
         setRetellClient(client);
-        client.on("ready", () => console.log("Retell client is ready"));
-        client.on("error", (err) => {
-          console.error("Retell client error:", err);
-          setError("Voice assistant encountered an issue: " + err.message);
-        });
-        client.on("call_started", () => console.log("Call has started"));
-        client.on("call_ended", () => console.log("Call has ended"));
       } catch (err) {
         console.error("Failed to initialize Retell SDK:", err);
         setError("Something went wrong loading the voice assistant: " + err.message);
@@ -50,7 +46,6 @@ export default function HomePage() {
         agent_id: "agent_950e5e1078a753c71cfe3fd35e",
       });
       console.log("Web call created:", response);
-      // The SDK should handle WebRTC setup, but let's ensure compatibility
       if (response.access_token) {
         console.log("Access token received:", response.access_token);
       } else {
