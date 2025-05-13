@@ -14,20 +14,11 @@ export default function HomePage() {
         console.log("Retell SDK loaded:", sdk);
         // Log all properties and methods available in the SDK
         console.log("Available SDK exports:", Object.keys(sdk));
-        // Try to instantiate WebCallClient (or fall back to another class if this doesn't work)
-        let client;
-        try {
-          client = new sdk.WebCallClient({
-            apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
-          });
-          console.log("Using WebCallClient");
-        } catch (err) {
-          console.warn("WebCallClient not found, falling back to RetellClient:", err);
-          client = new sdk.RetellClient({
-            apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
-          });
-          console.log("Using RetellClient as fallback");
-        }
+        // Instantiate RetellLLMClient
+        const client = new sdk.RetellLLMClient({
+          apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
+        });
+        console.log("Using RetellLLMClient");
         console.log("Retell client instance:", client);
         console.log("Available methods on retellClient:", Object.getOwnPropertyNames(client).concat(Object.getOwnPropertyNames(client.__proto__)));
         setRetellClient(client);
@@ -37,7 +28,7 @@ export default function HomePage() {
           setError("Voice assistant encountered an issue.");
         });
         if (typeof client.startCall !== "function") {
-          console.error("startCall method is not available on retellClient");
+          console.error("startCall method is not available on RetellLLMClient");
         }
       } catch (err) {
         console.error("Failed to load Retell SDK:", err);
@@ -127,7 +118,7 @@ export default function HomePage() {
             disabled={isLoading}
           >
             <img 
-              src="https://img.icons8.com/ios-filled/50/ffffff/microphone.png" 
+              src="https://cdn-icons-png.flaticon.com/512/108/108496.png" 
               alt="Microphone Icon" 
               style={{ width: '20px', height: '20px' }} 
             />
