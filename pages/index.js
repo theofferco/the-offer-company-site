@@ -1,4 +1,4 @@
-"user client";
+"use client";
 
 import { useEffect, useState } from 'react';
 
@@ -9,20 +9,16 @@ export default function HomePage() {
 
   async function createWebCall() {
     try {
-      console.log("Creating web call via API...");
-      const response = await fetch('https://api.retellai.com/create-web-call', {
+      console.log("Creating web call via API route...");
+      const response = await fetch('/api/create-web-call', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_RETELL_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          agent_id: "agent_950e5e1078a753c71cfe3fd35e",
-        }),
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to create web call');
+        throw new Error(data.error || 'Failed to create web call');
       }
       console.log("Web call created:", data);
       return data.access_token;
@@ -38,17 +34,12 @@ export default function HomePage() {
       setIsLoading(true);
       setError(null);
 
-      // Check API key
-      if (!process.env.NEXT_PUBLIC_RETELL_API_KEY) {
-        throw new Error("Retell API key is not set in environment variables.");
-      }
-
       // Request microphone access
       console.log("Requesting microphone access...");
       await navigator.mediaDevices.getUserMedia({ audio: true });
       console.log("Microphone access granted");
 
-      // Create web call via API
+      // Create web call via API route
       console.log("Initiating web call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
       const token = await createWebCall();
       setAccessToken(token);
@@ -95,7 +86,7 @@ export default function HomePage() {
       } else if (error.message.includes("network")) {
         setError("Network issue. Please check your internet connection.");
       } else if (error.message.includes("auth") || error.message.includes("Unauthorized")) {
-        setError("Authentication failed. Please check your API key.");
+        setError("Authentication failed. Please check your API key with Retell support.");
       } else {
         setError("Hope is currently unavailable: " + error.message);
       }
