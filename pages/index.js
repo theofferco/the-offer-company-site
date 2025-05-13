@@ -10,26 +10,18 @@ export default function HomePage() {
   useEffect(() => {
     async function loadRetell() {
       try {
-        const sdk = await import("retell-client-js-sdk");
+        const sdk = await import("retell-sdk");
         console.log("Retell SDK loaded:", sdk);
-        // Log all properties and methods available in the SDK
-        console.log("Available SDK exports:", Object.keys(sdk));
-        // Instantiate RetellClient
-        const client = new sdk.RetellClient({
+        const client = new sdk.Retell({
           apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
         });
-        console.log("Using RetellClient");
-        console.log("Retell client instance:", client);
-        console.log("Available methods on retellClient:", Object.getOwnPropertyNames(client).concat(Object.getOwnPropertyNames(client.__proto__)));
+        console.log("Retell client initialized:", client);
         setRetellClient(client);
         client.on("ready", () => console.log("Retell client is ready"));
         client.on("error", (err) => {
           console.error("Retell client error:", err);
           setError("Voice assistant encountered an issue.");
         });
-        if (typeof client.startCall !== "function") {
-          console.error("startCall method is not available on RetellClient");
-        }
       } catch (err) {
         console.error("Failed to load Retell SDK:", err);
         setError("Something went wrong loading the voice assistant.");
@@ -49,23 +41,12 @@ export default function HomePage() {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       setIsLoading(true);
       setError(null);
-      console.log("Initiating call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
-      let callStarted = false;
-      if (typeof retellClient.startCall === "function") {
-        await retellClient.startCall({
-          agentId: "agent_950e5e1078a753c71cfe3fd35e",
-        });
-        callStarted = true;
-      } else if (typeof retellClient.startConversation === "function") {
-        console.log("startCall not found, trying startConversation...");
-        await retellClient.startConversation({
-          agentId: "agent_950e5e1078a753c71cfe3fd35e",
-        });
-        callStarted = true;
-      } else {
-        throw new Error("Neither startCall nor startConversation is available");
-      }
-      console.log("Call started successfully");
+      console.log("Initiating web call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
+      const response = await retellClient.call.createWebCall({
+        agent_id: "agent_950e5e1078a753c71cfe3fd35e",
+      });
+      console.log("Web call created:", response);
+      // The SDK should handle the WebRTC setup internally
     } catch (error) {
       console.error("Failed to start Hope call:", error);
       if (error.name === "NotAllowedError") {
@@ -130,7 +111,7 @@ export default function HomePage() {
             disabled={isLoading}
           >
             <img 
-              src="https://cdn-icons-png.flaticon.com/512/108/108496.png" 
+              src="[invalid url, do not cite] 
               alt="Microphone Icon" 
               style={{ width: '20px', height: '20px' }} 
             />
