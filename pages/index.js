@@ -34,36 +34,29 @@ export default function HomePage() {
       setIsLoading(true);
       setError(null);
 
-      // Request microphone access
       console.log("Requesting microphone access...");
       await navigator.mediaDevices.getUserMedia({ audio: true });
       console.log("Microphone access granted");
 
-      // Create web call via API route
-      console.log("Initiating web call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
+      console.log("Initiating web call with agentId:", "agent_6293120c73de05c856f81ba68e");
       const token = await createWebCall();
       setAccessToken(token);
       console.log("Access token received:", token);
 
-      // Basic WebRTC setup
       console.log("Setting up WebRTC connection...");
       const peerConnection = new RTCPeerConnection({
         iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
       });
 
-      // Add audio stream
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
 
-      // Handle ICE candidates
       peerConnection.onicecandidate = (event) => {
         if (event.candidate) {
           console.log("ICE candidate:", event.candidate);
-          // In a real app, send the candidate to Retell’s signaling server
         }
       };
 
-      // Handle incoming audio stream
       peerConnection.ontrack = (event) => {
         console.log("Received remote stream:", event.streams[0]);
         const audio = new Audio();
@@ -71,13 +64,10 @@ export default function HomePage() {
         audio.play();
       };
 
-      // Create offer
       const offer = await peerConnection.createOffer();
       await peerConnection.setLocalDescription(offer);
       console.log("WebRTC offer created:", offer);
 
-      // In a real app, you'd send the offer to Retell’s signaling server and receive an answer
-      // For now, log the offer and stop here, as we don’t have the signaling server details
       console.log("Call setup initiated. Further signaling required.");
     } catch (error) {
       console.error("Failed to start Hope call:", error);
