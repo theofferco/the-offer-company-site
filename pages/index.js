@@ -14,11 +14,11 @@ export default function HomePage() {
         console.log("Retell SDK loaded:", sdk);
         // Log all properties and methods available in the SDK
         console.log("Available SDK exports:", Object.keys(sdk));
-        // Instantiate RetellLLMClient
-        const client = new sdk.RetellLLMClient({
+        // Instantiate RetellWebClient (since this was the original class used in version 1.0.0)
+        const client = new sdk.RetellWebClient({
           apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
         });
-        console.log("Using RetellLLMClient");
+        console.log("Using RetellWebClient");
         console.log("Retell client instance:", client);
         console.log("Available methods on retellClient:", Object.getOwnPropertyNames(client).concat(Object.getOwnPropertyNames(client.__proto__)));
         setRetellClient(client);
@@ -28,7 +28,7 @@ export default function HomePage() {
           setError("Voice assistant encountered an issue.");
         });
         if (typeof client.startCall !== "function") {
-          console.error("startCall method is not available on RetellLLMClient");
+          console.error("startCall method is not available on RetellWebClient");
         }
       } catch (err) {
         console.error("Failed to load Retell SDK:", err);
@@ -50,9 +50,22 @@ export default function HomePage() {
       setIsLoading(true);
       setError(null);
       console.log("Initiating call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
-      await retellClient.startCall({
-        agentId: "agent_950e5e1078a753c71cfe3fd35e",
-      });
+      // Try startCall, but fall back to startConversation if startCall doesn't exist
+      let callStarted = false;
+      if (typeof retellClient.startCall === "function") {
+        await retellClient.startCall({
+          agentId: "agent_950e5e1078a753c71cfe3fd35e",
+        });
+        callStarted = true;
+      } else if (typeof retellClient.startConversation === "function") {
+        console.log("startCall not found, trying startConversation...");
+        await retellClient.startConversation({
+          agentId: "agent_950e5e1078a753c71cfe3fd35e",
+        });
+        callStarted = true;
+      } else {
+        throw new Error("Neither startCall nor startConversation is available");
+      }
       console.log("Call started successfully");
     } catch (error) {
       console.error("Failed to start Hope call:", error);
