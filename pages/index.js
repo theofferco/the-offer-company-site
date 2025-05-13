@@ -1,63 +1,100 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Retell from 'retell-sdk'; // Static import
 
 export default function HomePage() {
-  const [retellClient, setRetellClient] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
 
-  useEffect(() => {
-    function loadRetell() {
-      try {
-        console.log("Initializing Retell client...");
-        if (!process.env.NEXT_PUBLIC_RETELL_API_KEY) {
-          throw new Error("Retell API key is not set in environment variables.");
-        }
-        const client = new Retell({
-          apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
-        });
-        console.log("Retell client initialized successfully:", client);
-        setRetellClient(client);
-      } catch (err) {
-        console.error("Failed to initialize Retell SDK:", err);
-        setError("Something went wrong loading the voice assistant: " + err.message);
+  async function createWebCall() {
+    try {
+      console.log("Creating web call via API...");
+      const response = await fetch('https://api.retellai.com/create-web-call', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_RETELL_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          agent_id: "agent_950e5e1078a753c71cfe3fd35e",
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create web call');
       }
+      console.log("Web call created:", data);
+      return data.access_token;
+    } catch (err) {
+      console.error("Failed to create web call:", err);
+      throw err;
     }
-    loadRetell();
-  }, []);
+  }
 
   async function startHopeCall() {
     console.log("Starting Hope call...");
-    if (!retellClient) {
-      console.error("Retell client not initialized");
-      setError("Voice assistant isn't ready yet. Please try again shortly.");
-      return;
-    }
     try {
       setIsLoading(true);
       setError(null);
+
+      // Check API key
+      if (!process.env.NEXT_PUBLIC_RETELL_API_KEY) {
+        throw new Error("Retell API key is not set in environment variables.");
+      }
+
+      // Request microphone access
       console.log("Requesting microphone access...");
       await navigator.mediaDevices.getUserMedia({ audio: true });
       console.log("Microphone access granted");
+
+      // Create web call via API
       console.log("Initiating web call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
-      const response = await retellClient.call.createWebCall({
-        agent_id: "agent_950e5e1078a753c71cfe3fd35e",
+      const token = await createWebCall();
+      setAccessToken(token);
+      console.log("Access token received:", token);
+
+      // Basic WebRTC setup
+      console.log("Setting up WebRTC connection...");
+      const peerConnection = new RTCPeerConnection({
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
       });
-      console.log("Web call created:", response);
-      if (response.access_token) {
-        console.log("Access token received:", response.access_token);
-      } else {
-        throw new Error("No access token received from createWebCall");
-      }
+
+      // Add audio stream
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+
+      // Handle ICE candidates
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          console.log("ICE candidate:", event.candidate);
+          // In a real app, send the candidate to Retell’s signaling server
+        }
+      };
+
+      // Handle incoming audio stream
+      peerConnection.ontrack = (event) => {
+        console.log("Received remote stream:", event.streams[0]);
+        const audio = new Audio();
+        audio.srcObject = event.streams[0];
+        audio.play();
+      };
+
+      // Create offer
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      console.log("WebRTC offer created:", offer);
+
+      // In a real app, you'd send the offer to Retell’s signaling server and receive an answer
+      // For now, log the offer and stop here, as we don’t have the signaling server details
+      console.log("Call setup initiated. Further signaling required.");
     } catch (error) {
       console.error("Failed to start Hope call:", error);
       if (error.name === "NotAllowedError") {
         setError("Please allow microphone access to talk to Hope.");
       } else if (error.message.includes("network")) {
         setError("Network issue. Please check your internet connection.");
-      } else if (error.message.includes("auth")) {
+      } else if (error.message.includes("auth") || error.message.includes("Unauthorized")) {
         setError("Authentication failed. Please check your API key.");
       } else {
         setError("Hope is currently unavailable: " + error.message);
