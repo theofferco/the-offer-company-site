@@ -12,15 +12,21 @@ export default function HomePage() {
       try {
         const sdk = await import("retell-client-js-sdk");
         console.log("Retell SDK loaded:", sdk);
-        const client = new sdk.RetellWebClient({
+        const client = new sdk.RetellClient({
           apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
         });
+        console.log("Retell client instance:", client);
+        console.log("Available methods on RetellClient:", Object.getOwnPropertyNames(client).concat(Object.getOwnPropertyNames(client.__proto__)));
         setRetellClient(client);
         client.on("ready", () => console.log("Retell client is ready"));
         client.on("error", (err) => {
           console.error("Retell client error:", err);
           setError("Voice assistant encountered an issue.");
         });
+        // Check if the client has a startCall method
+        if (typeof client.startCall !== "function") {
+          console.error("startCall method is not available on RetellClient");
+        }
       } catch (err) {
         console.error("Failed to load Retell SDK:", err);
         setError("Something went wrong loading the voice assistant.");
@@ -43,7 +49,6 @@ export default function HomePage() {
       console.log("Initiating call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
       await retellClient.startCall({
         agentId: "agent_950e5e1078a753c71cfe3fd35e",
-        // Add from_number or to_number if required
       });
       console.log("Call started successfully");
     } catch (error) {
