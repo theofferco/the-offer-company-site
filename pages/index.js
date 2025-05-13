@@ -12,20 +12,32 @@ export default function HomePage() {
       try {
         const sdk = await import("retell-client-js-sdk");
         console.log("Retell SDK loaded:", sdk);
-        const client = new sdk.RetellClient({
-          apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
-        });
+        // Log all properties and methods available in the SDK
+        console.log("Available SDK exports:", Object.keys(sdk));
+        // Try to instantiate WebCallClient (or fall back to another class if this doesn't work)
+        let client;
+        try {
+          client = new sdk.WebCallClient({
+            apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
+          });
+          console.log("Using WebCallClient");
+        } catch (err) {
+          console.warn("WebCallClient not found, falling back to RetellClient:", err);
+          client = new sdk.RetellClient({
+            apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
+          });
+          console.log("Using RetellClient as fallback");
+        }
         console.log("Retell client instance:", client);
-        console.log("Available methods on RetellClient:", Object.getOwnPropertyNames(client).concat(Object.getOwnPropertyNames(client.__proto__)));
+        console.log("Available methods on retellClient:", Object.getOwnPropertyNames(client).concat(Object.getOwnPropertyNames(client.__proto__)));
         setRetellClient(client);
         client.on("ready", () => console.log("Retell client is ready"));
         client.on("error", (err) => {
           console.error("Retell client error:", err);
           setError("Voice assistant encountered an issue.");
         });
-        // Check if the client has a startCall method
         if (typeof client.startCall !== "function") {
-          console.error("startCall method is not available on RetellClient");
+          console.error("startCall method is not available on retellClient");
         }
       } catch (err) {
         console.error("Failed to load Retell SDK:", err);
