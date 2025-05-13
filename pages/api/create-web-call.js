@@ -28,8 +28,16 @@ export default async function handler(req, res) {
     });
 
     console.log("Response status from Retell:", response.status);
-    const data = await response.json();
-    console.log("Response data from Retell:", data);
+    console.log("Response headers from Retell:", JSON.stringify([...response.headers]));
+
+    let data;
+    try {
+      data = await response.json();
+      console.log("Response data from Retell:", data);
+    } catch (jsonError) {
+      console.error("Failed to parse Retell response as JSON:", jsonError.message);
+      throw new Error(`Retell API returned invalid JSON: ${jsonError.message}`);
+    }
 
     if (!response.ok) {
       throw new Error(data.message || `Retell API error: ${response.status}`);
@@ -38,6 +46,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ access_token: data.access_token });
   } catch (error) {
     console.error("Error in create-web-call API:", error.message);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: `Failed to create web call: ${error.message}` });
   }
 }
