@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
@@ -9,10 +11,16 @@ export default function HomePage() {
     async function loadRetell() {
       try {
         const sdk = await import("retell-client-js-sdk");
+        console.log("Retell SDK loaded:", sdk);
         const client = new sdk.RetellWebClient({
-          apiKey: "key_3b5e16878853b718051cc08a9525"
+          apiKey: process.env.NEXT_PUBLIC_RETELL_API_KEY,
         });
         setRetellClient(client);
+        client.on("ready", () => console.log("Retell client is ready"));
+        client.on("error", (err) => {
+          console.error("Retell client error:", err);
+          setError("Voice assistant encountered an issue.");
+        });
       } catch (err) {
         console.error("Failed to load Retell SDK:", err);
         setError("Something went wrong loading the voice assistant.");
@@ -22,19 +30,33 @@ export default function HomePage() {
   }, []);
 
   async function startHopeCall() {
+    console.log("Starting Hope call...");
     if (!retellClient) {
+      console.error("Retell client not initialized");
       setError("Voice assistant isn't ready yet. Please try again shortly.");
       return;
     }
-    setIsLoading(true);
-    setError(null);
     try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      setIsLoading(true);
+      setError(null);
+      console.log("Initiating call with agentId:", "agent_950e5e1078a753c71cfe3fd35e");
       await retellClient.startCall({
         agentId: "agent_950e5e1078a753c71cfe3fd35e",
+        // Add from_number or to_number if required
       });
+      console.log("Call started successfully");
     } catch (error) {
       console.error("Failed to start Hope call:", error);
-      setError("Hope is currently unavailable. Please try again later.");
+      if (error.name === "NotAllowedError") {
+        setError("Please allow microphone access to talk to Hope.");
+      } else if (error.message.includes("network")) {
+        setError("Network issue. Please check your internet connection.");
+      } else if (error.message.includes("auth")) {
+        setError("Authentication failed. Please contact support.");
+      } else {
+        setError("Hope is currently unavailable. Please try again later.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -50,8 +72,6 @@ export default function HomePage() {
       textAlign: 'center',
       backgroundImage: 'linear-gradient(to bottom, #1a1a1a 0%, #333333 100%)'
     }}>
-
-      {/* Hero Section */}
       <section style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <img
@@ -104,8 +124,6 @@ export default function HomePage() {
           No typing needed—just speak naturally and Hope will guide you.
         </p>
       </section>
-
-      {/* Footer */}
       <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
         <p style={{ marginBottom: '6px' }}>The Offer Company</p>
         <p style={{ marginBottom: '6px' }}>4802 E Ray Rd, Phoenix, AZ 85044</p>
@@ -116,7 +134,6 @@ export default function HomePage() {
           We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
-
       <style jsx global>{`
         @keyframes pulse {
           0% { transform: scale(1); }
