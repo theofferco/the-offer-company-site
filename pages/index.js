@@ -11,7 +11,7 @@ export default function HomePage() {
   const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
   const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
   const buttonConfig = {
-    position: "bottom-right", // Keep default position, we'll move it with CSS
+    position: "bottom-right", // Start with default position, we'll move it
     offset: "20px",
     theme: "light",
     welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
@@ -19,9 +19,8 @@ export default function HomePage() {
 
   // Load Vapi AI SDK when the page loads
   useEffect(() => {
-    // Use the latest Vapi AI SDK version (update the URL if a newer version is available)
     const script = document.createElement("script");
-    script.src = "https://unpkg.com/@vapi-ai/web@0.1.47/dist/web/vapi.js"; // Updated to a newer version
+    script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"; // Revert to the working script
     script.defer = true;
     script.async = true;
     document.body.appendChild(script);
@@ -29,21 +28,24 @@ export default function HomePage() {
     script.onload = () => {
       try {
         // Initialize Vapi SDK with the widget
-        const vapi = new window.Vapi(apiKey);
-        vapi.start(assistant, buttonConfig);
-        setVapiInstance(vapi);
+        const instance = window.vapiSDK.run({
+          apiKey: apiKey,
+          assistant: assistant,
+          config: buttonConfig,
+        });
+        setVapiInstance(instance);
         console.log("Vapi AI SDK loaded successfully");
 
         // Add event listeners for call start and end
-        vapi.on('callStart', () => {
+        instance.on('callStart', () => {
           console.log("Call with Hope started");
           setIsLoading(false);
         });
-        vapi.on('callEnd', () => {
+        instance.on('callEnd', () => {
           console.log("Call with Hope ended");
           setIsLoading(false);
         });
-        vapi.on('error', (err) => {
+        instance.on('error', (err) => {
           console.error("Vapi AI error:", err);
           setError("Hope encountered an error: " + err.message);
           setIsLoading(false);
@@ -51,9 +53,9 @@ export default function HomePage() {
 
         // Move the widget button to the desired location
         const checkButton = setInterval(() => {
-          const vapiButton = document.querySelector('#vapi-control-btn'); // Updated selector
+          const vapiButton = document.querySelector('#vapi-control-btn') || document.querySelector('.vapi-button'); // Try both ID and class
           if (vapiButton) {
-            const parentContainer = document.querySelector('#vapi-container');
+            const parentContainer = document.querySelector('#vapi-container') || document.querySelector('.vapi-container');
             if (parentContainer) {
               const targetContainer = document.querySelector('#vapi-target-container');
               if (targetContainer) {
@@ -130,7 +132,7 @@ export default function HomePage() {
           100% { transform: scale(1); }
         }
         /* Style the Vapi AI widget button to match the blue button */
-        #vapi-control-btn {
+        #vapi-control-btn, .vapi-button {
           background-color: ${isLoading ? '#666' : '#3b82f6'} !important;
           color: white !important;
           font-size: 18px !important;
@@ -150,14 +152,14 @@ export default function HomePage() {
           position: static !important;
         }
         /* Add the microphone icon to the Vapi AI widget button */
-        #vapi-control-btn::before {
+        #vapi-control-btn::before, .vapi-button::before {
           content: url('https://cdn-icons-png.flaticon.com/512/108/108496.png');
           width: 20px !important;
           height: 20px !important;
           margin-right: 12px !important;
         }
         /* Hide the default Vapi AI container */
-        #vapi-container {
+        #vapi-container, .vapi-container {
           display: none !important;
         }
       `}</style>
