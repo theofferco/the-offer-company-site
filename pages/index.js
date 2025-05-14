@@ -20,33 +20,37 @@ export default function HomePage() {
     document.body.appendChild(script);
 
     script.onload = () => {
-      // Initialize Vapi SDK without rendering the default widget UI
-      const instance = window.vapiSDK.run({
-        apiKey: apiKey,
-        assistant: assistant,
-        config: {
-          // Remove button UI rendering by not specifying position or dimensions
-          theme: "light",
-          welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-        },
-      });
-      setVapiInstance(instance);
-      console.log("Vapi AI SDK loaded successfully");
+      try {
+        // Initialize Vapi SDK without rendering the default widget UI
+        const instance = window.vapiSDK.run({
+          apiKey: apiKey,
+          assistant: assistant,
+          config: {
+            theme: "light",
+            welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
+          },
+        });
+        setVapiInstance(instance);
+        console.log("Vapi AI SDK loaded successfully");
 
-      // Add event listeners for call start and end
-      instance.on('callStart', () => {
-        console.log("Call with Hope started");
-        setIsLoading(false);
-      });
-      instance.on('callEnd', () => {
-        console.log("Call with Hope ended");
-        setIsLoading(false);
-      });
-      instance.on('error', (err) => {
-        console.error("Vapi AI error:", err);
-        setError("Hope encountered an error: " + err.message);
-        setIsLoading(false);
-      });
+        // Add event listeners for call start and end
+        instance.on('callStart', () => {
+          console.log("Call with Hope started");
+          setIsLoading(false);
+        });
+        instance.on('callEnd', () => {
+          console.log("Call with Hope ended");
+          setIsLoading(false);
+        });
+        instance.on('error', (err) => {
+          console.error("Vapi AI error:", err);
+          setError("Hope encountered an error: " + err.message);
+          setIsLoading(false);
+        });
+      } catch (err) {
+        console.error("Failed to initialize Vapi AI SDK:", err);
+        setError("Failed to initialize Hope. Please try again later.");
+      }
     };
 
     script.onerror = () => {
@@ -59,7 +63,7 @@ export default function HomePage() {
     };
   }, []);
 
-  // Toggle the Vapi AI call when the button is clicked
+  // Start the Vapi AI call when the button is clicked
   const startHopeCall = () => {
     if (!vapiInstance) {
       setError("Hope is not ready yet. Please wait a moment and try again.");
@@ -70,9 +74,17 @@ export default function HomePage() {
     setError(null);
 
     try {
-      console.log("Toggling Vapi AI call...");
-      vapiInstance.toggleCall(); // Directly toggle the call without widget UI
-      console.log("Vapi AI call toggled");
+      console.log("Starting Vapi AI call...");
+      // Check if startCall method exists, otherwise try connect or log available methods
+      if (typeof vapiInstance.startCall === "function") {
+        vapiInstance.startCall();
+      } else if (typeof vapiInstance.connect === "function") {
+        vapiInstance.connect();
+      } else {
+        console.log("Available methods on vapiInstance:", Object.keys(vapiInstance));
+        throw new Error("No valid method to start the call. Check Vapi AI SDK documentation.");
+      }
+      console.log("Vapi AI call started");
     } catch (err) {
       console.error("Failed to start Hope call:", err);
       setError("Hope is currently unavailable: " + err.message);
