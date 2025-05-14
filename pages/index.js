@@ -1,15 +1,24 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [vapiInstance, setVapiInstance] = useState(null);
+  const vapiButtonRef = useRef(null); // Reference to the green button
 
   // Vapi AI configuration
   const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
   const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
+  const buttonConfig = {
+    position: "bottom-right",
+    offset: "20px",
+    width: "400px",
+    height: "600px",
+    theme: "light",
+    welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
+  };
 
   // Load Vapi AI SDK when the page loads
   useEffect(() => {
@@ -21,14 +30,11 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        // Initialize Vapi SDK without rendering the default widget UI
+        // Initialize Vapi SDK with the default widget (green button)
         const instance = window.vapiSDK.run({
           apiKey: apiKey,
           assistant: assistant,
-          config: {
-            theme: "light",
-            welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-          },
+          config: buttonConfig,
         });
         setVapiInstance(instance);
         console.log("Vapi AI SDK loaded successfully");
@@ -47,6 +53,15 @@ export default function HomePage() {
           setError("Hope encountered an error: " + err.message);
           setIsLoading(false);
         });
+
+        // Find the Vapi AI widget button (green button) after it renders
+        const checkButton = setInterval(() => {
+          const vapiButton = document.querySelector('.vapi-sdk-widget-button'); // Adjust selector based on Vapi AI's actual class
+          if (vapiButton) {
+            vapiButtonRef.current = vapiButton;
+            clearInterval(checkButton);
+          }
+        }, 500);
       } catch (err) {
         console.error("Failed to initialize Vapi AI SDK:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -63,10 +78,15 @@ export default function HomePage() {
     };
   }, []);
 
-  // Start the Vapi AI call when the button is clicked
+  // Trigger the Vapi AI call by simulating a click on the green button
   const startHopeCall = () => {
     if (!vapiInstance) {
       setError("Hope is not ready yet. Please wait a moment and try again.");
+      return;
+    }
+
+    if (!vapiButtonRef.current) {
+      setError("Hope is not fully loaded. Please wait a moment and try again.");
       return;
     }
 
@@ -74,17 +94,9 @@ export default function HomePage() {
     setError(null);
 
     try {
-      console.log("Starting Vapi AI call...");
-      // Check if startCall method exists, otherwise try connect or log available methods
-      if (typeof vapiInstance.startCall === "function") {
-        vapiInstance.startCall();
-      } else if (typeof vapiInstance.connect === "function") {
-        vapiInstance.connect();
-      } else {
-        console.log("Available methods on vapiInstance:", Object.keys(vapiInstance));
-        throw new Error("No valid method to start the call. Check Vapi AI SDK documentation.");
-      }
-      console.log("Vapi AI call started");
+      console.log("Triggering Vapi AI call via widget button...");
+      vapiButtonRef.current.click(); // Simulate a click on the green button
+      console.log("Vapi AI call triggered");
     } catch (err) {
       console.error("Failed to start Hope call:", err);
       setError("Hope is currently unavailable: " + err.message);
@@ -169,6 +181,10 @@ export default function HomePage() {
           0% { transform: scale(1); }
           50% { transform: scale(1.05); }
           100% { transform: scale(1); }
+        }
+        /* Hide the Vapi AI widget button */
+        .vapi-sdk-widget-button {
+          display: none !important;
         }
       `}</style>
     </main>
