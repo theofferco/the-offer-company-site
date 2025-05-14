@@ -3,62 +3,35 @@
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [vapiInstance, setVapiInstance] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Vapi AI configuration
-  const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
-  const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
-  const buttonConfig = {
-    position: "bottom-right", // Default, we'll move it with CSS/JavaScript
-    offset: "20px",
-    theme: "light",
-    welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-  };
+  const assistant = "52985622-77b0-4746-9028-871e7fd97c0a";
+  const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024";
 
-  // Load Vapi AI SDK when the page loads
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://unpkg.com/@vapi-ai/web-widget/dist/vapi.js"; // Updated to match Vapi AI's likely setup
+    script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
     script.defer = true;
     script.async = true;
     document.body.appendChild(script);
 
     script.onload = () => {
       try {
-        // Initialize Vapi SDK with the widget
-        const vapi = new window.Vapi(apiKey);
-        vapi.start(assistant, buttonConfig);
-        setVapiInstance(vapi);
-        console.log("Vapi AI SDK loaded successfully");
+        const instance = window.vapiSDK.run({
+          apiKey,
+          assistant,
+          config: {
+            disableDefaultButton: true, // THIS disables the floating widget
+          },
+        });
 
-        // Add event listeners for call start and end
-        vapi.on('call-start', () => {
-          console.log("Call with Hope started");
-          setIsLoading(false);
-        });
-        vapi.on('call-end', () => {
-          console.log("Call with Hope ended");
-          setIsLoading(false);
-        });
-        vapi.on('error', (err) => {
+        setVapiInstance(instance);
+
+        instance.on("error", (err) => {
           console.error("Vapi AI error:", err);
           setError("Hope encountered an error: " + err.message);
-          setIsLoading(false);
         });
-
-        // Move the widget button to the desired location
-        const checkButton = setInterval(() => {
-          const vapiButton = document.querySelector('#vapi-control-btn');
-          if (vapiButton) {
-            const targetContainer = document.querySelector('#vapi-target-container');
-            if (targetContainer) {
-              targetContainer.appendChild(vapiButton); // Move the button
-              clearInterval(checkButton);
-            }
-          }
-        }, 500);
       } catch (err) {
         console.error("Failed to initialize Vapi AI SDK:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -66,7 +39,6 @@ export default function HomePage() {
     };
 
     script.onerror = () => {
-      console.error("Failed to load Vapi AI SDK");
       setError("Failed to load Hope. Please try again later.");
     };
 
@@ -74,6 +46,12 @@ export default function HomePage() {
       document.body.removeChild(script);
     };
   }, []);
+
+  const handleTalkToHope = () => {
+    if (vapiInstance) {
+      vapiInstance.startCall();
+    }
+  };
 
   return (
     <main style={{
@@ -99,12 +77,41 @@ export default function HomePage() {
         <h2 style={{ fontSize: '20px', marginBottom: '16px', lineHeight: '1.6', color: '#ccc' }}>
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
-        <div id="vapi-target-container" style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-          {/* Vapi AI widget button will be moved here */}
+
+        {/* Centered Custom Button */}
+        <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+          <button
+            onClick={handleTalkToHope}
+            style={{
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              fontSize: '18px',
+              fontWeight: '500',
+              padding: '16px 32px',
+              borderRadius: '40px',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+              animation: 'pulse 2s infinite',
+            }}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/108/108496.png"
+              alt="Microphone"
+              style={{ width: '22px', height: '22px' }}
+            />
+            Talk to Hope Now
+          </button>
         </div>
+
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
         )}
+
         <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
           No typing needed—just speak naturally and Hope will guide you.
         </p>
@@ -119,42 +126,12 @@ export default function HomePage() {
           We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
+
       <style jsx global>{`
         @keyframes pulse {
           0% { transform: scale(1); }
           50% { transform: scale(1.05); }
           100% { transform: scale(1); }
-        }
-        /* Style the Vapi AI widget button to match the blue button */
-        #vapi-control-btn {
-          background-color: ${isLoading ? '#666' : '#3b82f6'} !important;
-          color: white !important;
-          font-size: 18px !important;
-          font-weight: 500 !important;
-          padding: 14px 28px !important;
-          border-radius: 30px !important;
-          border: none !important;
-          cursor: ${isLoading ? 'not-allowed' : 'pointer'} !important;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
-          max-width: 90% !important;
-          width: 280px !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 12px !important;
-          animation: ${isLoading ? 'none' : 'pulse 2s infinite'} !important;
-          position: static !important;
-        }
-        /* Add the microphone icon to the Vapi AI widget button */
-        #vapi-control-btn::before {
-          content: url('https://cdn-icons-png.flaticon.com/512/108/108496.png');
-          width: 20px !important;
-          height: 20px !important;
-          margin-right: 12px !important;
-        }
-        /* Hide the default Vapi AI container */
-        #vapi-container {
-          display: none !important;
         }
       `}</style>
     </main>
