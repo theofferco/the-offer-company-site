@@ -16,7 +16,7 @@ export default function HomePage() {
       try {
         const instance = window.vapiSDK.run({
           apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
-          assistant: "52985622-77b0-4746-9028-871e7fd97c0a",
+          assistant: "b6c9fff2-2b35-4048-af69-abac232b03e5",
           config: {
             theme: "light",
             welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
