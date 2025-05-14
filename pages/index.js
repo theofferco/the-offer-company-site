@@ -5,63 +5,50 @@ import { useEffect, useState } from 'react';
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [vapiInstance, setVapiInstance] = useState(null);
 
   // Vapi AI configuration
-  const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
-  const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
+  const assistant = "52985622-77b0-4746-9028-871e7fd97c0a";
+  const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024";
   const buttonConfig = {
-    position: "bottom-right", // Default position, we'll move it
     offset: "20px",
     theme: "light",
     welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
   };
 
-  // Load Vapi AI SDK when the page loads
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"; // Revert to the original working script
+    script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
     script.defer = true;
     script.async = true;
     document.body.appendChild(script);
 
     script.onload = () => {
       try {
-        // Initialize Vapi SDK with the widget
         const instance = window.vapiSDK.run({
           apiKey: apiKey,
           assistant: assistant,
           config: buttonConfig,
         });
-        setVapiInstance(instance);
-        console.log("Vapi AI SDK loaded successfully");
 
-        // Add event listeners for call start and end
-        instance.on('callStart', () => {
-          console.log("Call with Hope started");
-          setIsLoading(false);
-        });
-        instance.on('callEnd', () => {
-          console.log("Call with Hope ended");
-          setIsLoading(false);
-        });
+        // Move the widget into the center container
+        const checkButton = setInterval(() => {
+          const vapiButton = document.querySelector('[data-vapi-call-button]');
+          const targetContainer = document.querySelector('#vapi-target-container');
+          if (vapiButton && targetContainer) {
+            targetContainer.appendChild(vapiButton);
+            clearInterval(checkButton);
+          }
+        }, 500);
+
+        // Event listeners
+        instance.on('callStart', () => setIsLoading(false));
+        instance.on('callEnd', () => setIsLoading(false));
         instance.on('error', (err) => {
           console.error("Vapi AI error:", err);
           setError("Hope encountered an error: " + err.message);
           setIsLoading(false);
         });
 
-        // Move the widget button to the desired location
-        const checkButton = setInterval(() => {
-          const vapiButton = document.querySelector('[data-vapi-call-button]'); // Updated selector based on Vapi AI conventions
-          if (vapiButton) {
-            const targetContainer = document.querySelector('#vapi-target-container');
-            if (targetContainer) {
-              targetContainer.appendChild(vapiButton); // Move the button
-              clearInterval(checkButton);
-            }
-          }
-        }, 500);
       } catch (err) {
         console.error("Failed to initialize Vapi AI SDK:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -103,7 +90,7 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
         <div id="vapi-target-container" style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-          {/* Vapi AI widget button will be moved here */}
+          {/* Vapi AI widget button will be inserted here */}
         </div>
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
@@ -128,7 +115,6 @@ export default function HomePage() {
           50% { transform: scale(1.05); }
           100% { transform: scale(1); }
         }
-        /* Style the Vapi AI widget button to match the blue button */
         [data-vapi-call-button] {
           background-color: ${isLoading ? '#666' : '#3b82f6'} !important;
           color: white !important;
@@ -148,14 +134,12 @@ export default function HomePage() {
           animation: ${isLoading ? 'none' : 'pulse 2s infinite'} !important;
           position: static !important;
         }
-        /* Add the microphone icon to the Vapi AI widget button */
         [data-vapi-call-button]::before {
           content: url('https://cdn-icons-png.flaticon.com/512/108/108496.png');
           width: 20px !important;
-          height: '20px !important;
+          height: 20px !important;
           margin-right: 12px !important;
         }
-        /* Hide any default Vapi AI container elements */
         [data-vapi-container] {
           display: none !important;
         }
