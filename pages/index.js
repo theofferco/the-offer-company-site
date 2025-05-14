@@ -1,21 +1,18 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [vapiInstance, setVapiInstance] = useState(null);
-  const vapiButtonRef = useRef(null); // Reference to the green button
 
   // Vapi AI configuration
   const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
   const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
   const buttonConfig = {
-    position: "bottom-right",
-    offset: "20px",
-    width: "400px",
-    height: "600px",
+    position: "center", // Center the widget button
+    offset: "0px",
     theme: "light",
     welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
   };
@@ -30,7 +27,7 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        // Initialize Vapi SDK with the default widget (green button)
+        // Initialize Vapi SDK with the widget
         const instance = window.vapiSDK.run({
           apiKey: apiKey,
           assistant: assistant,
@@ -53,15 +50,6 @@ export default function HomePage() {
           setError("Hope encountered an error: " + err.message);
           setIsLoading(false);
         });
-
-        // Find the Vapi AI widget button (green button) after it renders
-        const checkButton = setInterval(() => {
-          const vapiButton = document.querySelector('.vapi-sdk-widget-button'); // Adjust selector based on Vapi AI's actual class
-          if (vapiButton) {
-            vapiButtonRef.current = vapiButton;
-            clearInterval(checkButton);
-          }
-        }, 500);
       } catch (err) {
         console.error("Failed to initialize Vapi AI SDK:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -77,32 +65,6 @@ export default function HomePage() {
       document.body.removeChild(script);
     };
   }, []);
-
-  // Trigger the Vapi AI call by simulating a click on the green button
-  const startHopeCall = () => {
-    if (!vapiInstance) {
-      setError("Hope is not ready yet. Please wait a moment and try again.");
-      return;
-    }
-
-    if (!vapiButtonRef.current) {
-      setError("Hope is not fully loaded. Please wait a moment and try again.");
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      console.log("Triggering Vapi AI call via widget button...");
-      vapiButtonRef.current.click(); // Simulate a click on the green button
-      console.log("Vapi AI call triggered");
-    } catch (err) {
-      console.error("Failed to start Hope call:", err);
-      setError("Hope is currently unavailable: " + err.message);
-      setIsLoading(false);
-    }
-  };
 
   return (
     <main style={{
@@ -128,37 +90,7 @@ export default function HomePage() {
         <h2 style={{ fontSize: '20px', marginBottom: '32px', lineHeight: '1.6', color: '#ccc' }}>
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button 
-            style={{
-              backgroundColor: isLoading ? '#666' : '#3b82f6',
-              color: 'white',
-              fontSize: '18px',
-              fontWeight: '500',
-              padding: '14px 28px',
-              borderRadius: '30px',
-              border: 'none',
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-              maxWidth: '90%',
-              width: '280px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              animation: isLoading ? 'none' : 'pulse 2s infinite'
-            }}
-            onClick={startHopeCall}
-            disabled={isLoading}
-          >
-            <img 
-              src="https://cdn-icons-png.flaticon.com/512/108/108496.png"
-              alt="Microphone Icon"
-              style={{ width: '20px', height: '20px' }}
-            />
-            {isLoading ? 'Connecting to Hope...' : 'Talk to Hope Now'}
-          </button>
-        </div>
+        {/* Removed the blue button */}
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
         )}
@@ -182,9 +114,40 @@ export default function HomePage() {
           50% { transform: scale(1.05); }
           100% { transform: scale(1); }
         }
-        /* Hide the Vapi AI widget button */
+        /* Style the Vapi AI widget button to match the blue button */
         .vapi-sdk-widget-button {
-          display: none !important;
+          background-color: ${isLoading ? '#666' : '#3b82f6'} !important;
+          color: white !important;
+          font-size: 18px !important;
+          font-weight: 500 !important;
+          padding: 14px 28px !important;
+          border-radius: 30px !important;
+          border: none !important;
+          cursor: ${isLoading ? 'not-allowed' : 'pointer'} !important;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
+          max-width: 90% !important;
+          width: 280px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 12px !important;
+          animation: ${isLoading ? 'none' : 'pulse 2s infinite'} !important;
+          position: relative !important;
+          bottom: auto !important;
+          right: auto !important;
+        }
+        /* Add the microphone icon to the Vapi AI widget button */
+        .vapi-sdk-widget-button::before {
+          content: url('https://cdn-icons-png.flaticon.com/512/108/108496.png');
+          width: 20px !important;
+          height: 20px !important;
+          margin-right: 12px !important;
+        }
+        /* Ensure the widget container doesn't interfere with positioning */
+        .vapi-sdk-widget-container {
+          display: flex !important;
+          justify-content: center !important;
+          position: static !important;
         }
       `}</style>
     </main>
