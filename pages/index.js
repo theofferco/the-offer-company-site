@@ -5,85 +5,83 @@ import { useEffect, useState } from 'react';
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
+  const [vapiInstance, setVapiInstance] = useState(null);
 
-  async function createWebCall() {
-    try {
-      console.log("Creating web call via API route...");
-      const response = await fetch('/api/create-web-call', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  // Vapi AI configuration
+  const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
+  const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
+  const buttonConfig = {
+    position: "bottom-right",
+    offset: "20px",
+    width: "400px",
+    height: "600px",
+    theme: "light",
+    welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
+  };
+
+  // Load Vapi AI widget when the page loads
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+    script.defer = true;
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      const instance = window.vapiSDK.run({
+        apiKey: apiKey,
+        assistant: assistant,
+        config: buttonConfig,
       });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create web call');
-      }
-      console.log("Web call created:", data);
-      return data.access_token;
-    } catch (err) {
-      console.error("Failed to create web call:", err);
-      throw err;
+      setVapiInstance(instance);
+      console.log("Vapi AI widget loaded successfully");
+
+      // Add event listeners for call start and end
+      instance.on('callStart', () => {
+        console.log("Call with Hope started");
+        setIsLoading(false);
+      });
+      instance.on('callEnd', () => {
+        console.log("Call with Hope ended");
+        setIsLoading(false);
+      });
+      instance.on('error', (err) => {
+        console.error("Vapi AI error:", err);
+        setError("Hope encountered an error: " + err.message);
+        setIsLoading(false);
+      });
+    };
+
+    script.onerror = () => {
+      console.error("Failed to load Vapi AI widget");
+      setError("Failed to load Hope. Please try again later.");
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // Toggle the Vapi AI call when the button is clicked
+  const startHopeCall = () => {
+    if (!vapiInstance) {
+      setError("Hope is not ready yet. Please wait a moment and try again.");
+      return;
     }
-  }
 
-  async function startHopeCall() {
-    console.log("Starting Hope call...");
+    setIsLoading(true);
+    setError(null);
+
     try {
-      setIsLoading(true);
-      setError(null);
-
-      console.log("Requesting microphone access...");
-      await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log("Microphone access granted");
-
-      console.log("Initiating web call with agentId:", "agent_6293120c73de05c856f81ba68e");
-      const token = await createWebCall();
-      setAccessToken(token);
-      console.log("Access token received:", token);
-
-      console.log("Setting up WebRTC connection...");
-      const peerConnection = new RTCPeerConnection({
-        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
-      });
-
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-
-      peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-          console.log("ICE candidate:", event.candidate);
-        }
-      };
-
-      peerConnection.ontrack = (event) => {
-        console.log("Received remote stream:", event.streams[0]);
-        const audio = new Audio();
-        audio.srcObject = event.streams[0];
-        audio.play();
-      };
-
-      const offer = await peerConnection.createOffer();
-      await peerConnection.setLocalDescription(offer);
-      console.log("WebRTC offer created:", offer);
-
-      console.log("Call setup initiated. Further signaling required.");
-    } catch (error) {
-      console.error("Failed to start Hope call:", error);
-      if (error.name === "NotAllowedError") {
-        setError("Please allow microphone access to talk to Hope.");
-      } else if (error.message.includes("network")) {
-        setError("Network issue. Please check your internet connection.");
-      } else if (error.message.includes("auth") || error.message.includes("Unauthorized")) {
-        setError("Authentication failed. Please check your API key with Retell support.");
-      } else {
-        setError("Hope is currently unavailable: " + error.message);
-      }
-    } finally {
+      console.log("Toggling Vapi AI call...");
+      vapiInstance.toggleCall();
+      console.log("Vapi AI call toggled");
+    } catch (err) {
+      console.error("Failed to start Hope call:", err);
+      setError("Hope is currently unavailable: " + err.message);
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <main style={{
