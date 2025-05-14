@@ -14,19 +14,28 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        // Render the widget exactly where we want it
-        window.vapiSDK.renderWidget({
+        const instance = window.vapiSDK.run({
           apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
           assistant: "52985622-77b0-4746-9028-871e7fd97c0a",
-          container: "#vapi-button-container",
           config: {
             theme: "light",
-            shape: "pill",
-            size: "large",
-            showMicIcon: true,
             welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-          },
+            position: "bottom-right", // Still needed to load, we'll override it
+          }
         });
+
+        // Wait for the button to load and move it to the desired container
+        const moveButton = setInterval(() => {
+          const button = document.querySelector('[data-vapi-call-button]');
+          const container = document.querySelector('#vapi-button-container');
+
+          if (button && container) {
+            container.appendChild(button);
+            button.style.position = 'static'; // remove fixed placement
+            button.style.margin = '0 auto';   // center horizontally
+            clearInterval(moveButton);
+          }
+        }, 500);
       } catch (err) {
         console.error("Vapi widget init error:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -67,7 +76,7 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* Centered Custom Widget Placement */}
+        {/* This is where we inject the widget */}
         <div id="vapi-button-container" style={{ display: 'flex', justifyContent: 'center', margin: '24px 0' }}></div>
 
         {error && (
