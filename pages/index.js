@@ -3,11 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  const [vapiInstance, setVapiInstance] = useState(null);
   const [error, setError] = useState(null);
-
-  const assistant = "52985622-77b0-4746-9028-871e7fd97c0a";
-  const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024";
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -18,22 +14,20 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        const instance = window.vapiSDK.run({
-          apiKey,
-          assistant,
+        window.vapiSDK.renderWidget({
+          apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
+          assistant: "52985622-77b0-4746-9028-871e7fd97c0a",
+          container: "#vapi-button-container", // custom placement
           config: {
-            disableDefaultButton: true, // THIS disables the floating widget
+            theme: "light",
+            shape: "pill", // optional: pill | round
+            size: "large", // optional: large | medium | small
+            showMicIcon: true,
+            welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
           },
         });
-
-        setVapiInstance(instance);
-
-        instance.on("error", (err) => {
-          console.error("Vapi AI error:", err);
-          setError("Hope encountered an error: " + err.message);
-        });
       } catch (err) {
-        console.error("Failed to initialize Vapi AI SDK:", err);
+        console.error("Vapi widget init error:", err);
         setError("Failed to initialize Hope. Please try again later.");
       }
     };
@@ -46,12 +40,6 @@ export default function HomePage() {
       document.body.removeChild(script);
     };
   }, []);
-
-  const handleTalkToHope = () => {
-    if (vapiInstance) {
-      vapiInstance.startCall();
-    }
-  };
 
   return (
     <main style={{
@@ -78,35 +66,8 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* Centered Custom Button */}
-        <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-          <button
-            onClick={handleTalkToHope}
-            style={{
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              fontSize: '18px',
-              fontWeight: '500',
-              padding: '16px 32px',
-              borderRadius: '40px',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-              animation: 'pulse 2s infinite',
-            }}
-          >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/108/108496.png"
-              alt="Microphone"
-              style={{ width: '22px', height: '22px' }}
-            />
-            Talk to Hope Now
-          </button>
-        </div>
+        {/* 🔥 Custom Button Placement */}
+        <div id="vapi-button-container" style={{ display: 'flex', justifyContent: 'center', margin: '24px 0' }}></div>
 
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
@@ -116,24 +77,19 @@ export default function HomePage() {
           No typing needed—just speak naturally and Hope will guide you.
         </p>
       </section>
+
       <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
-        <p style={{ marginBottom: '6px' }}>The Offer Company</p>
-        <p style={{ marginBottom: '6px' }}>4802 E Ray Rd, Phoenix, AZ 85044</p>
-        <p style={{ marginBottom: '6px' }}>(602) 448-7377 • support@theofferco.com</p>
-        <p style={{ marginBottom: '12px' }}>BR License #652927000</p>
-        <p style={{ marginTop: '10px' }}>Hope is our virtual voice assistant, here to support homeowners in distress 24/7.</p>
+        <p>The Offer Company</p>
+        <p>4802 E Ray Rd, Phoenix, AZ 85044</p>
+        <p>(602) 448-7377 • support@theofferco.com</p>
+        <p>BR License #652927000</p>
+        <p style={{ marginTop: '10px' }}>
+          Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
+        </p>
         <p style={{ fontSize: '12px', marginTop: '8px', color: '#888' }}>
           We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
-
-      <style jsx global>{`
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
-        }
-      `}</style>
     </main>
   );
 }
