@@ -14,14 +14,15 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
+        // Render the widget exactly where we want it
         window.vapiSDK.renderWidget({
           apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
           assistant: "52985622-77b0-4746-9028-871e7fd97c0a",
-          container: "#vapi-button-container", // custom placement
+          container: "#vapi-button-container",
           config: {
             theme: "light",
-            shape: "pill", // optional: pill | round
-            size: "large", // optional: large | medium | small
+            shape: "pill",
+            size: "large",
             showMicIcon: true,
             welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
           },
@@ -66,7 +67,7 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* 🔥 Custom Button Placement */}
+        {/* Centered Custom Widget Placement */}
         <div id="vapi-button-container" style={{ display: 'flex', justifyContent: 'center', margin: '24px 0' }}></div>
 
         {error && (
