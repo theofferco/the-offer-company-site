@@ -10,16 +10,8 @@ export default function HomePage() {
   // Vapi AI configuration
   const assistant = "52985622-77b0-4746-9028-871e7fd97c0a"; // Vapi AI agent ID
   const apiKey = "65d895f6-2369-402c-a5dd-60c641e22024"; // Vapi AI public API key
-  const buttonConfig = {
-    position: "bottom-right",
-    offset: "20px",
-    width: "400px",
-    height: "600px",
-    theme: "light",
-    welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-  };
 
-  // Load Vapi AI widget when the page loads
+  // Load Vapi AI SDK when the page loads
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
@@ -28,13 +20,18 @@ export default function HomePage() {
     document.body.appendChild(script);
 
     script.onload = () => {
+      // Initialize Vapi SDK without rendering the default widget UI
       const instance = window.vapiSDK.run({
         apiKey: apiKey,
         assistant: assistant,
-        config: buttonConfig,
+        config: {
+          // Remove button UI rendering by not specifying position or dimensions
+          theme: "light",
+          welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
+        },
       });
       setVapiInstance(instance);
-      console.log("Vapi AI widget loaded successfully");
+      console.log("Vapi AI SDK loaded successfully");
 
       // Add event listeners for call start and end
       instance.on('callStart', () => {
@@ -53,7 +50,7 @@ export default function HomePage() {
     };
 
     script.onerror = () => {
-      console.error("Failed to load Vapi AI widget");
+      console.error("Failed to load Vapi AI SDK");
       setError("Failed to load Hope. Please try again later.");
     };
 
@@ -74,7 +71,7 @@ export default function HomePage() {
 
     try {
       console.log("Toggling Vapi AI call...");
-      vapiInstance.toggleCall();
+      vapiInstance.toggleCall(); // Directly toggle the call without widget UI
       console.log("Vapi AI call toggled");
     } catch (err) {
       console.error("Failed to start Hope call:", err);
