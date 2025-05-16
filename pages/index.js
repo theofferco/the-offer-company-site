@@ -20,22 +20,23 @@ export default function HomePage() {
           config: {
             theme: "light",
             welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-            position: "bottom-right", // Still needed to load, we'll override it
+            position: "bottom-right", // still required to trigger load
           }
         });
 
-        // Wait for the button to load and move it to the desired container
+        // Repeatedly try to move the widget until it succeeds
         const moveButton = setInterval(() => {
           const button = document.querySelector('[data-vapi-call-button]');
           const container = document.querySelector('#vapi-button-container');
 
-          if (button && container) {
+          if (button && container && !container.contains(button)) {
             container.appendChild(button);
-            button.style.position = 'static'; // remove fixed placement
-            button.style.margin = '0 auto';   // center horizontally
+            button.style.position = 'static';
+            button.style.margin = '0 auto';
+            button.style.display = 'inline-flex';
             clearInterval(moveButton);
           }
-        }, 500);
+        }, 250);
       } catch (err) {
         console.error("Vapi widget init error:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -76,7 +77,7 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* This is where we inject the widget */}
+        {/* This is where the widget button gets injected */}
         <div id="vapi-button-container" style={{ display: 'flex', justifyContent: 'center', margin: '24px 0' }}></div>
 
         {error && (
