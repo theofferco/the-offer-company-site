@@ -63,7 +63,7 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* Static Blue Button with Mic Icon */}
+        {/* Static Blue Button with Inline SVG Mic Icon */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
           <button
             id="talk-to-hope-btn"
@@ -84,11 +84,15 @@ export default function HomePage() {
               cursor: 'pointer'
             }}
           >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/108/108496.png"
-              alt="Mic"
-              style={{ width: '20px', height: '20px', filter: 'invert(1)' }}
-            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="20"
+              width="20"
+              viewBox="0 0 24 24"
+              fill="white"
+            >
+              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H8v2h8v-2h-3v-2.08A7 7 0 0 0 19 11Z" />
+            </svg>
             Talk to Hope Now
           </button>
         </div>
