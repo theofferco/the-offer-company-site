@@ -100,6 +100,50 @@ export default function HomePage() {
           We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
+
+      <style jsx global>{`
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.05); opacity: 0.9; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        [data-vapi-call-button] {
+          background-color: #3b82f6 !important;
+          color: white !important;
+          font-size: 18px !important;
+          font-weight: 600 !important;
+          padding: 14px 28px !important;
+          border-radius: 30px !important;
+          border: none !important;
+          cursor: pointer !important;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 12px !important;
+          animation: pulse 2s infinite !important;
+          transition: transform 0.2s ease !important;
+          position: static !important;
+          width: auto !important;
+        }
+
+        [data-vapi-call-button]:hover {
+          transform: scale(1.05);
+        }
+
+        [data-vapi-call-button]::before {
+          content: url('https://cdn-icons-png.flaticon.com/512/108/108496.png');
+          width: 20px !important;
+          height: 20px !important;
+          display: inline-block !important;
+          margin-right: 8px !important;
+        }
+
+        [data-vapi-container] {
+          display: none !important;
+        }
+      `}</style>
     </main>
   );
 }
