@@ -63,7 +63,7 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* Static Blue Button with Microphone Icon */}
+        {/* Static Blue Button with Mic Icon */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
           <button
             id="talk-to-hope-btn"
@@ -87,7 +87,7 @@ export default function HomePage() {
             <img
               src="https://cdn-icons-png.flaticon.com/512/108/108496.png"
               alt="Mic"
-              style={{ width: '20px', height: '20px' }}
+              style={{ width: '20px', height: '20px', filter: 'invert(1)' }}
             />
             Talk to Hope Now
           </button>
