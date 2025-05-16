@@ -14,29 +14,15 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        const instance = window.vapiSDK.run({
+        window.vapiSDK.run({
           apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
           assistant: "b6c9fff2-2b35-4048-af69-abac232b03e5",
           config: {
             theme: "light",
             welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-            position: "bottom-right", // still required to trigger load
+            position: "bottom-right",
           }
         });
-
-        // Repeatedly try to move the widget until it succeeds
-        const moveButton = setInterval(() => {
-          const button = document.querySelector('[data-vapi-call-button]');
-          const container = document.querySelector('#vapi-button-container');
-
-          if (button && container && !container.contains(button)) {
-            container.appendChild(button);
-            button.style.position = 'static';
-            button.style.margin = '0 auto';
-            button.style.display = 'inline-flex';
-            clearInterval(moveButton);
-          }
-        }, 250);
       } catch (err) {
         console.error("Vapi widget init error:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -73,12 +59,39 @@ export default function HomePage() {
         <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
           Facing Foreclosure? Meet Hope – Your Personal Real Estate Assistant.
         </h1>
-        <h2 style={{ fontSize: '20px', marginBottom: '16px', lineHeight: '1.6', color: '#ccc' }}>
+        <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* This is where the widget button gets injected */}
-        <div id="vapi-button-container" style={{ display: 'flex', justifyContent: 'center', margin: '24px 0' }}></div>
+        {/* Static Blue Button with Microphone Icon */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+          <button
+            id="talk-to-hope-btn"
+            style={{
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              fontSize: '18px',
+              fontWeight: 600,
+              padding: '14px 28px',
+              borderRadius: '30px',
+              border: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+              animation: 'pulse 2s infinite',
+              cursor: 'pointer'
+            }}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/108/108496.png"
+              alt="Mic"
+              style={{ width: '20px', height: '20px' }}
+            />
+            Talk to Hope Now
+          </button>
+        </div>
 
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
@@ -107,42 +120,6 @@ export default function HomePage() {
           0% { transform: scale(1); opacity: 1; }
           50% { transform: scale(1.05); opacity: 0.9; }
           100% { transform: scale(1); opacity: 1; }
-        }
-
-        [data-vapi-call-button] {
-          background-color: #3b82f6 !important;
-          color: white !important;
-          font-size: 18px !important;
-          font-weight: 600 !important;
-          padding: 14px 28px !important;
-          border-radius: 30px !important;
-          border: none !important;
-          cursor: pointer !important;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 12px !important;
-          animation: pulse 2s infinite !important;
-          transition: transform 0.2s ease !important;
-          position: static !important;
-          width: auto !important;
-        }
-
-        [data-vapi-call-button]:hover {
-          transform: scale(1.05);
-        }
-
-        [data-vapi-call-button]::before {
-          content: url('https://cdn-icons-png.flaticon.com/512/108/108496.png');
-          width: 20px !important;
-          height: 20px !important;
-          display: inline-block !important;
-          margin-right: 8px !important;
-        }
-
-        [data-vapi-container] {
-          display: none !important;
         }
       `}</style>
     </main>
