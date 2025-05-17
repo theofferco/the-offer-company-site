@@ -5,7 +5,30 @@ import { useEffect, useState } from 'react';
 export default function HomePage() {
   const [error, setError] = useState(null);
 
+  var talkToHopeBtn = null;
+  var talkToHopeBtnLabel = null;
+  var VapiInstance = null;
+  
+  const initiateVapiMeeting = () => {
+    talkToHopeBtn.children[0].style.display = "none";
+    talkToHopeBtn.style.backgroundColor = "#1a9513";
+    talkToHopeBtnLabel.textContent = "Connecting...";
+    document.getElementById("vapi-support-btn").click();
+  }
+
   useEffect(() => {
+    talkToHopeBtn = document.getElementById("talk-to-hope-btn");
+    talkToHopeBtnLabel = document.getElementById("talk-to-hope-btn-text");
+
+    const VapiButtonStyles = document.createElement("style");
+    VapiButtonStyles.type = 'text/css';
+    VapiButtonStyles.innerHTML = `
+      #vapi-support-btn {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(VapiButtonStyles);
+
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
     script.defer = true;
@@ -14,7 +37,7 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        window.vapiSDK.run({
+        VapiInstance = window.vapiSDK.run({
           apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
           assistant: "b6c9fff2-2b35-4048-af69-abac232b03e5",
           config: {
@@ -23,6 +46,22 @@ export default function HomePage() {
             position: "bottom-right",
           }
         });
+
+
+        document.getElementById("talk-to-hope-btn").addEventListener("click", initiateVapiMeeting);
+
+        VapiInstance.on('call-start', () => {
+          talkToHopeBtn.children[0].style.display = "inline-flex";
+          talkToHopeBtn.style.backgroundColor = "#e13211";
+          talkToHopeBtnLabel.textContent = "Disconnect";
+        });
+
+        VapiInstance.on('call-end', () => {
+          talkToHopeBtn.children[0].style.display = "inline-flex";
+          talkToHopeBtn.style.backgroundColor = "#3b82f6";          
+          talkToHopeBtnLabel.textContent = "Talk to Hope Now";
+        });
+
       } catch (err) {
         console.error("Vapi widget init error:", err);
         setError("Failed to initialize Hope. Please try again later.");
@@ -35,6 +74,7 @@ export default function HomePage() {
 
     return () => {
       document.body.removeChild(script);
+      document.removeEventListener("click", initiateVapiMeeting);
     };
   }, []);
 
@@ -93,7 +133,7 @@ export default function HomePage() {
             >
               <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H8v2h8v-2h-3v-2.08A7 7 0 0 0 19 11Z" />
             </svg>
-            Talk to Hope Now
+            <span id="talk-to-hope-btn-text">Talk to Hope Now</span>
           </button>
         </div>
 
