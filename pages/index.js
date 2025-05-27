@@ -1,35 +1,56 @@
-"use client";
+// FILE: Layout.jsx
+// Site-wide layout shell with hamburger menu and navigation
+
+import Link from 'next/link';
+import { useState } from 'react';
+import Head from 'next/head';
+
+export default function Layout({ children }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <Head>
+        <title>The Offer Company | Foreclosure Help in Arizona</title>
+        <meta name="description" content="Facing foreclosure in Arizona? Talk to Hope — The Offer Company's AI assistant — for a fast, no-pressure cash offer. No fees. No judgment. Just help." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <header style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1a1a', color: 'white' }}>
+        <Link href="/">
+          <h1 style={{ fontSize: '20px', fontWeight: 'bold' }}>The Offer Company</h1>
+        </Link>
+        <button
+          onClick={() => setOpen(!open)}
+          style={{ fontSize: '24px', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+        >
+          ☰
+        </button>
+      </header>
+
+      {open && (
+        <nav style={{ backgroundColor: '#2a2a2a', padding: '20px', textAlign: 'left' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'white' }}>
+            <li><Link href="/foreclosure-help">Foreclosure Help</Link></li>
+            <li><Link href="/how-it-works">How It Works</Link></li>
+            <li><Link href="/reviews">Reviews</Link></li>
+            <li><Link href="/about">About Us</Link></li>
+          </ul>
+        </nav>
+      )}
+
+      <main>{children}</main>
+    </div>
+  );
+}
+
+// FILE: pages/index.jsx
 
 import { useEffect, useState } from 'react';
-import Head from 'next/head';
 
 export default function HomePage() {
   const [error, setError] = useState(null);
 
-  var talkToHopeBtn = null;
-  var talkToHopeBtnLabel = null;
-  var VapiInstance = null;
-
-  const initiateVapiMeeting = () => {
-    talkToHopeBtn.children[0].style.display = "none";
-    talkToHopeBtn.style.backgroundColor = "#1a9513";
-    talkToHopeBtnLabel.textContent = "Connecting...";
-    document.getElementById("vapi-support-btn").click();
-  };
-
   useEffect(() => {
-    talkToHopeBtn = document.getElementById("talk-to-hope-btn");
-    talkToHopeBtnLabel = document.getElementById("talk-to-hope-btn-text");
-
-    const VapiButtonStyles = document.createElement("style");
-    VapiButtonStyles.type = "text/css";
-    VapiButtonStyles.innerHTML = `
-      #vapi-support-btn {
-        display: none !important;
-      }
-    `;
-    document.head.appendChild(VapiButtonStyles);
-
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
     script.defer = true;
@@ -38,202 +59,101 @@ export default function HomePage() {
 
     script.onload = () => {
       try {
-        VapiInstance = window.vapiSDK.run({
+        const talkBtn = document.getElementById("talk-to-hope-btn");
+        const talkLabel = document.getElementById("talk-to-hope-btn-text");
+
+        const instance = window.vapiSDK.run({
           apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
           assistant: "b6c9fff2-2b35-4048-af69-abac232b03e5",
-          config: {
-            theme: "light",
-            welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-            position: "bottom-right",
-          }
+          config: { theme: "light", position: "bottom-right" }
         });
 
-        document.getElementById("talk-to-hope-btn").addEventListener("click", initiateVapiMeeting);
+        const hideDefaultBtn = document.createElement("style");
+        hideDefaultBtn.textContent = `#vapi-support-btn { display: none !important; }`;
+        document.head.appendChild(hideDefaultBtn);
 
-        VapiInstance.on("call-start", () => {
-          talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#e13211";
-          talkToHopeBtnLabel.textContent = "Disconnect";
+        talkBtn.addEventListener("click", () => {
+          talkBtn.children[0].style.display = "none";
+          talkBtn.style.backgroundColor = "#1a9513";
+          talkLabel.textContent = "Connecting...";
+          document.getElementById("vapi-support-btn")?.click();
         });
 
-        VapiInstance.on("call-end", () => {
-          talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#3b82f6";
-          talkToHopeBtnLabel.textContent = "Talk to Hope Now";
+        instance.on("call-start", () => {
+          talkBtn.children[0].style.display = "inline-flex";
+          talkBtn.style.backgroundColor = "#e13211";
+          talkLabel.textContent = "Disconnect";
+        });
+
+        instance.on("call-end", () => {
+          talkBtn.children[0].style.display = "inline-flex";
+          talkBtn.style.backgroundColor = "#3b82f6";
+          talkLabel.textContent = "Talk to Hope Now";
         });
       } catch (err) {
-        console.error("Vapi widget init error:", err);
-        setError("Failed to initialize Hope. Please try again later.");
+        console.error("Widget error:", err);
+        setError("Hope failed to load. Please try again later.");
       }
     };
 
-    script.onerror = () => {
-      setError("Failed to load Hope. Please try again later.");
-    };
+    script.onerror = () => setError("Failed to load Hope.");
 
     return () => {
       document.body.removeChild(script);
-      document.removeEventListener("click", initiateVapiMeeting);
     };
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>Foreclosure Help in Arizona | The Offer Company</title>
-        <meta
-          name="description"
-          content="Facing foreclosure in Arizona? The Offer Company helps you sell your home quickly—with cash offers, no fees, and real solutions. Speak with Hope, our AI assistant, today."
-        />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "RealEstateAgent",
-            "name": "The Offer Company",
-            "url": "https://the-offer-company-site.vercel.app",
-            "logo": "https://the-offer-company-site.vercel.app/logo.png",
-            "description": "We help homeowners facing foreclosure sell their homes quickly with no fees or pressure. Cash offers, relocation assistance, and foreclosure solutions throughout Arizona.",
-            "areaServed": {
-              "@type": "Place",
-              "address": {
-                "@type": "PostalAddress",
-                "addressRegion": "AZ",
-                "addressCountry": "US"
-              }
-            },
-            "founder": {
-              "@type": "Person",
-              "name": "Annette Brown"
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+16024487377",
-              "contactType": "Customer Service",
-              "areaServed": "US",
-              "availableLanguage": ["English", "Spanish"]
-            },
-            "sameAs": [
-              "https://www.facebook.com/TheOfferCompany",
-              "https://www.yelp.com/biz/the-offer-company-phoenix"
-            ]
-          })
-        }} />
-      </Head>
+    <main style={{ fontFamily: 'Arial, sans-serif', padding: '120px 20px 40px', backgroundColor: '#1a1a1a', color: 'white', textAlign: 'center', minHeight: '100vh' }}>
+      <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '16px' }}>Facing Foreclosure?</h1>
+      <h2 style={{ fontSize: '20px', color: '#ccc', marginBottom: '32px' }}>Talk to Hope — Our AI Assistant — for Real Help Today.</h2>
 
-      <main style={{
-        fontFamily: 'Arial, sans-serif',
-        padding: '60px 20px',
-        backgroundColor: '#1a1a1a',
-        color: 'white',
-        minHeight: '100vh',
-        textAlign: 'center',
-        backgroundImage: 'linear-gradient(to bottom, #1a1a1a 0%, #333333 100%)'
-      }}>
-        <section style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <img
-              src="/hope-avatar.jpg"
-              alt="Hope Assistant"
-              style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '20px', objectFit: 'cover' }}
-            />
-          </div>
-          <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
-            Facing Foreclosure? Meet Hope – Your Personal Real Estate Assistant.
-          </h1>
-          <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
-            Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
-          </h2>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+        <button
+          id="talk-to-hope-btn"
+          style={{
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            fontSize: '18px',
+            fontWeight: 600,
+            padding: '14px 28px',
+            borderRadius: '30px',
+            border: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+            animation: 'pulse 2s infinite',
+            cursor: 'pointer'
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20"
+            width="20"
+            viewBox="0 0 24 24"
+            fill="white"
+          >
+            <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H8v2h8v-2h-3v-2.08A7 7 0 0 0 19 11Z" />
+          </svg>
+          <span id="talk-to-hope-btn-text">Talk to Hope Now</span>
+        </button>
+      </div>
 
-          {/* Static Blue Button with Inline SVG Mic Icon */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <button
-              id="talk-to-hope-btn"
-              style={{
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: 600,
-                padding: '14px 28px',
-                borderRadius: '30px',
-                border: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-                animation: 'pulse 2s infinite',
-                cursor: 'pointer'
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                width="20"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H8v2h8v-2h-3v-2.08A7 7 0 0 0 19 11Z" />
-              </svg>
-              <span id="talk-to-hope-btn-text">Talk to Hope Now</span>
-            </button>
-          </div>
+      {error && <p style={{ color: '#ff6b6b' }}>{error}</p>}
 
-          {error && (
-            <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
-          )}
+      <footer style={{ fontSize: '14px', color: '#888', marginTop: '60px' }}>
+        © 2025 The Offer Company · <a href="https://g.page/r/CZsdKqMCUw3hEB0/review" target="_blank" style={{ color: '#3b82f6' }}>Leave a Google Review</a>
+      </footer>
 
-          <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
-            No typing needed—just speak naturally and Hope will guide you.
-          </p>
-        </section>
-
-        {/* AI-Optimized FAQ Section */}
-        <section style={{ paddingTop: '40px', maxWidth: '800px', margin: '0 auto', textAlign: 'left' }}>
-          <h3 style={{ fontSize: '22px', color: '#fff', marginBottom: '16px' }}>Foreclosure Help FAQs</h3>
-          <div style={{ marginBottom: '24px' }}>
-            <strong style={{ color: '#3b82f6' }}>Can I sell my home after receiving a Notice of Default?</strong>
-            <p style={{ color: '#ccc' }}>
-              Yes, you can sell your home during pre-foreclosure. The Offer Company helps homeowners like you secure a fast sale before things escalate—often with relocation funds and no fees.
-            </p>
-          </div>
-          <div style={{ marginBottom: '24px' }}>
-            <strong style={{ color: '#3b82f6' }}>Are there any upfront costs?</strong>
-            <p style={{ color: '#ccc' }}>
-              Never. We cover all closing costs and offer a no-obligation cash offer for your home—even if it’s distressed or behind on payments.
-            </p>
-          </div>
-          <div>
-            <strong style={{ color: '#3b82f6' }}>Can I stay in my home after selling?</strong>
-            <p style={{ color: '#ccc' }}>
-              In many cases, yes. We offer post-possession agreements that let you stay in the home temporarily while planning your next steps.
-            </p>
-          </div>
-        </section>
-
-        <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb', marginTop: '40px' }}>
-          <p>The Offer Company</p>
-          <p>4802 E Ray Rd, Phoenix, AZ 85044</p>
-          <p>(602) 448-7377 • support@theofferco.com</p>
-          <p>BR License #652927000</p>
-          <p style={{ marginTop: '10px' }}>
-            Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
-          </p>
-          <p style={{ fontSize: '12px', marginTop: '8px', color: '#888' }}>
-            We are not attorneys or financial advisors. This site is for informational purposes only.
-          </p>
-          <p style={{ fontSize: '14px', marginTop: '32px', color: '#888' }}>
-            Have we helped you avoid foreclosure? <a href="https://g.page/r/CZsdKqMCUw3hEB0/review" style={{ color: '#3b82f6' }}>Leave a quick review here</a> — it helps others find real help, fast.
-          </p>
-        </footer>
-
-        <style jsx global>{`
-          @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-        `}</style>
-      </main>
-    </>
+      <style jsx global>{`
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.05); opacity: 0.9; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
+    </main>
   );
 }
