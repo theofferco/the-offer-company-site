@@ -1,3 +1,50 @@
+// FILE: Layout.jsx
+// Site-wide layout shell with hamburger menu and navigation
+
+import Link from 'next/link';
+import { useState } from 'react';
+import Head from 'next/head';
+
+export default function Layout({ children }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <Head>
+        <title>The Offer Company | Foreclosure Help in Arizona</title>
+        <meta name="description" content="Facing foreclosure in Arizona? Talk to Hope — The Offer Company's AI assistant — for a fast, no-pressure cash offer. No fees. No judgment. Just help." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <header style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1a1a', color: 'white' }}>
+        <Link href="/">
+          <h1 style={{ fontSize: '20px', fontWeight: 'bold' }}>The Offer Company</h1>
+        </Link>
+        <button
+          onClick={() => setOpen(!open)}
+          style={{ fontSize: '24px', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+        >
+          ☰
+        </button>
+      </header>
+
+      {open && (
+        <nav style={{ backgroundColor: '#2a2a2a', padding: '20px', textAlign: 'left' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'white' }}>
+            <li><Link href="/foreclosure-help">Foreclosure Help</Link></li>
+            <li><Link href="/how-it-works">How It Works</Link></li>
+            <li><Link href="/reviews">Reviews</Link></li>
+            <li><Link href="/about">About Us</Link></li>
+          </ul>
+        </nav>
+      )}
+
+      <main>{children}</main>
+    </div>
+  );
+}
+
+// FILE: pages/index.jsx
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -14,7 +61,7 @@ export default function HomePage() {
     talkToHopeBtn.style.backgroundColor = "#1a9513";
     talkToHopeBtnLabel.textContent = "Connecting...";
     document.getElementById("vapi-support-btn").click();
-  };
+  }
 
   useEffect(() => {
     talkToHopeBtn = document.getElementById("talk-to-hope-btn");
@@ -57,7 +104,7 @@ export default function HomePage() {
 
         VapiInstance.on('call-end', () => {
           talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#3b82f6";
+          talkToHopeBtn.style.backgroundColor = "#3b82f6";          
           talkToHopeBtnLabel.textContent = "Talk to Hope Now";
         });
 
@@ -139,10 +186,6 @@ export default function HomePage() {
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
         )}
-
-        <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
-          No typing needed—just speak naturally and Hope will guide you.
-        </p>
       </section>
 
       <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
@@ -152,9 +195,6 @@ export default function HomePage() {
         <p>BR License #652927000</p>
         <p style={{ marginTop: '10px' }}>
           Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
-        </p>
-        <p style={{ fontSize: '12px', marginTop: '8px', color: '#888' }}>
-          We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
 
