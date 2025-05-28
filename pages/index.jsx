@@ -140,9 +140,6 @@ export default function HomePage() {
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
         )}
 
-        <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
-          No typing needed—just speak naturally and Hope will guide you.
-        </p>
       </section>
 
       <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
@@ -152,9 +149,6 @@ export default function HomePage() {
         <p>BR License #652927000</p>
         <p style={{ marginTop: '10px' }}>
           Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
-        </p>
-        <p style={{ fontSize: '12px', marginTop: '8px', color: '#888' }}>
-          We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
 
