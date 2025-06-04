@@ -96,7 +96,7 @@ export default function HomePage() {
           />
         </div>
         <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
-          Facing Foreclosure? Meet Hope – Your Personal AI Real Estate Agent.
+          Facing Foreclosure? Meet Hope – Your Personal AI Real Estate Assistant.
         </h1>
         <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
