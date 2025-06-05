@@ -1,3 +1,71 @@
+// FILE: Layout.jsx
+// Site-wide layout shell with hamburger menu and navigation
+
+import Link from 'next/link';
+import { useState } from 'react';
+import Head from 'next/head';
+
+export default function Layout({ children }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <Head>
+        <title>The Offer Company | Foreclosure Help in Arizona</title>
+        <meta name="description" content="Facing foreclosure in Arizona? Talk to Hope — The Offer Company's AI assistant — for a fast, no-pressure cash offer. No fees. No judgment. Just help." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <header style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1a1a1a', color: 'white' }}>
+        <Link href="/">
+          <h1 style={{ fontSize: '20px', fontWeight: 'bold' }}>The Offer Company</h1>
+        </Link>
+        <button
+          onClick={() => setOpen(!open)}
+          style={{ fontSize: '24px', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+        >
+          ☰
+        </button>
+      </header>
+
+      {open && (
+        <nav style={{ backgroundColor: '#2a2a2a', padding: '20px', textAlign: 'left' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'white' }}>
+            <li><Link href="/foreclosure-help">Foreclosure Help</Link></li>
+            <li><Link href="/how-it-works">How It Works</Link></li>
+            <li><Link href="/reviews">Reviews</Link></li>
+            <li><Link href="/about">About Us</Link></li>
+          </ul>
+        </nav>
+      )}
+
+      <main>{children}</main>
+
+      <footer style={{ backgroundColor: '#002e4d', color: '#fff', padding: '40px 20px', fontSize: '14px', lineHeight: '1.6' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>About The Offer Company</h3>
+          <p style={{ marginTop: '10px' }}>
+            Your trusted partner for foreclosure relief and off-market real estate solutions in Arizona. Our AI assistant Hope is available 24/7 to provide no-pressure guidance, answer questions, and connect you with fast options to avoid foreclosure and protect your equity.
+          </p>
+
+          <div style={{ marginTop: '30px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>Contact Us</h3>
+            <p>📍 4802 E Ray Rd, Phoenix, AZ 85044</p>
+            <p>📞 (602) 448-7377</p>
+            <p>📧 support@theofferco.com</p>
+          </div>
+
+          <div style={{ marginTop: '30px', borderTop: '1px solid #555', paddingTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
+            <p style={{ margin: '0' }}>© The Offer Company - All rights reserved</p>
+            <p style={{ margin: '0' }}>theofferco.com</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+// FILE: pages/index.jsx
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -8,7 +76,7 @@ export default function HomePage() {
   var talkToHopeBtn = null;
   var talkToHopeBtnLabel = null;
   var VapiInstance = null;
-  
+
   const initiateVapiMeeting = () => {
     talkToHopeBtn.children[0].style.display = "none";
     talkToHopeBtn.style.backgroundColor = "#1a9513";
@@ -57,7 +125,7 @@ export default function HomePage() {
 
         VapiInstance.on('call-end', () => {
           talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#3b82f6";          
+          talkToHopeBtn.style.backgroundColor = "#3b82f6";
           talkToHopeBtnLabel.textContent = "Talk to Hope Now";
         });
 
@@ -102,7 +170,6 @@ export default function HomePage() {
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
         </h2>
 
-        {/* Static Blue Button with Inline SVG Mic Icon */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
           <button
             id="talk-to-hope-btn"
@@ -139,24 +206,7 @@ export default function HomePage() {
         {error && (
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
         )}
-
-        <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
-          No typing needed—just speak naturally and Hope will guide you.
-        </p>
       </section>
-
-      <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
-        <p>The Offer Company</p>
-        <p>4802 E Ray Rd, Phoenix, AZ 85044</p>
-        <p>(602) 448-7377 • support@theofferco.com</p>
-        <p>BR License #652927000</p>
-        <p style={{ marginTop: '10px' }}>
-          Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
-        </p>
-        <p style={{ fontSize: '12px', marginTop: '8px', color: '#888' }}>
-          We are not attorneys or financial advisors. This site is for informational purposes only.
-        </p>
-      </footer>
 
       <style jsx global>{`
         @keyframes pulse {
