@@ -96,7 +96,7 @@ export default function HomePage() {
           />
         </div>
         <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
-          Facing Foreclosure? Meet Hope – Your Personal AI Real Estate Assistant.
+          Facing Foreclosure? Meet Hope – Your Personal Real Estate Assistant.
         </h1>
         <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
           Talk directly with Hope to get answers, support, and personalized options—without pressure or judgment.
@@ -140,6 +140,9 @@ export default function HomePage() {
           <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
         )}
 
+        <p style={{ fontSize: '15px', marginTop: '16px', color: '#aaa' }}>
+          No typing needed—just speak naturally and Hope will guide you.
+        </p>
       </section>
 
       <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
@@ -149,6 +152,9 @@ export default function HomePage() {
         <p>BR License #652927000</p>
         <p style={{ marginTop: '10px' }}>
           Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
+        </p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: '#888' }}>
+          We are not attorneys or financial advisors. This site is for informational purposes only.
         </p>
       </footer>
 
