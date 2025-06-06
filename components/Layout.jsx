@@ -7,16 +7,18 @@ export default function Layout({ children }) {
     <div className={styles.container}>
       <header className={styles.header}>
         <nav className={styles.nav}>
-          <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
-          <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
-          <ul className={styles.menu}>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/why">Why Us</Link></li>
-            <li><Link href="/stories">Real Stories</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
-            <li><Link href="/hope">Talk to Hope</Link></li>
-          </ul>
+          <div className={styles.menuWrapper}>
+            <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
+            <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
+            <ul className={styles.menu}>
+              <li><Link href="/">Home</Link></li>
+              <li><Link href="/about">About</Link></li>
+              <li><Link href="/why">Why Us</Link></li>
+              <li><Link href="/stories">Real Stories</Link></li>
+              <li><Link href="/faq">FAQ</Link></li>
+              <li><Link href="/hope">Talk to Hope</Link></li>
+            </ul>
+          </div>
         </nav>
       </header>
 
