@@ -1,69 +1,108 @@
-import Link from 'next/link';
-import styles from '../styles/Layout.module.css';
+/* styles/Layout.module.css */
 
-export default function Layout({ children }) {
-  return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <nav className={styles.nav}>
-          <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
-          <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
-          <ul className={styles.menu}>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/why-us">Why Us</Link></li>
-            <li><Link href="/real-stories">Real Stories</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
-            <li><Link href="/">Talk to Hope</Link></li>
-          </ul>
-        </nav>
-      </header>
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: white;
+}
 
-      <main className={styles.main}>{children}</main>
+.header {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  position: relative;
+  z-index: 999;
+}
 
-      <footer className={styles.footer}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '2rem' }}>
-          <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '0.5rem', color: '#fff' }}>
-            The Offer Company
-          </h3>
-          <p style={{ fontSize: '14px', color: '#ccc', marginBottom: '2rem' }}>
-            A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.
-          </p>
+.nav {
+  position: relative;
+}
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '2rem' }}>
-            <div>
-              <h4 style={{ fontSize: '16px', fontWeight: 'bold', color: '#fff', marginBottom: '0.5rem' }}>
-                Contact Us
-              </h4>
-              <p style={{ fontSize: '14px', margin: 0, color: '#ccc' }}>The Offer Company</p>
-              <p style={{ fontSize: '14px', margin: 0, color: '#ccc' }}>4802 E. Ray Road</p>
-              <p style={{ fontSize: '14px', margin: 0, color: '#ccc' }}>Phoenix, AZ 85044</p>
-              <p style={{ fontSize: '14px', margin: '0.5rem 0 0', color: '#ccc' }}>Phone: 602-448-7377</p>
-              <p style={{ fontSize: '14px', marginBottom: '0.5rem', color: '#ccc' }}>Email: support@theofferco.com</p>
-            </div>
+.menuToggle {
+  display: none;
+}
 
-            <div>
-              <h4 style={{ fontSize: '16px', fontWeight: 'bold', color: '#fff', marginBottom: '0.5rem' }}>
-                Quick Links
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, fontSize: '14px' }}>
-                <li><Link href="/about">About The Offer Company</Link></li>
-                <li><Link href="/why-us">Why Homeowners Trust Us</Link></li>
-                <li><Link href="/real-stories">Real Stories</Link></li>
-                <li><Link href="/faq">Frequently Asked Questions</Link></li>
-                <li><Link href="/">Back to Hope (AI Assistant)</Link></li>
-                <li><Link href="/privacy">Privacy Policy</Link></li>
-                <li><Link href="/terms">Terms of Use</Link></li>
-                <li><a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">𝕏 @theofferco</a></li>
-              </ul>
-            </div>
-          </div>
+.hamburger {
+  font-size: 2rem;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+  display: block;
+}
 
-          <p style={{ fontSize: '13px', color: '#888', marginTop: '2rem' }}>
-            © The Offer Company – All rights reserved
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
+.menu {
+  display: none;
+  position: absolute;
+  top: 3.5rem;
+  left: 1rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 1000;
+  list-style: none;
+  flex-direction: column;
+  width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.menu li {
+  margin: 0.5rem 0;
+}
+
+.menu li a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.menu li a:hover {
+  text-decoration: underline;
+}
+
+.menuToggle:checked + label + .menu {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.footer {
+  background-color: #1a1a1a;
+  color: #ccc;
+  font-size: 14px;
+  padding: 3rem 2rem;
+}
+
+.footer h3,
+.footer h4 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.footer p {
+  margin: 0.25rem 0;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer ul li {
+  margin: 0.3rem 0;
+}
+
+.footer a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
