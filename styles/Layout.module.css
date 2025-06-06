@@ -48,7 +48,11 @@ export default function Layout({ children }) {
             <li><Link href="/">Back to Hope (AI Assistant)</Link></li>
             <li><Link href="/privacy">Privacy Policy</Link></li>
             <li><Link href="/terms">Terms of Use</Link></li>
-            <li><a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">𝕏 @theofferco</a></li>
+            <li>
+              <a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">
+                𝕏 @theofferco
+              </a>
+            </li>
           </ul>
         </div>
 
