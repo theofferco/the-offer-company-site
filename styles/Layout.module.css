@@ -1,5 +1,4 @@
 /* styles/Layout.module.css */
-
 .container {
   display: flex;
   flex-direction: column;
@@ -12,8 +11,7 @@
 }
 
 .nav {
-  display: flex;
-  flex-direction: column;
+  position: relative;
 }
 
 .menuToggle {
@@ -23,38 +21,55 @@
 .hamburger {
   font-size: 1.5rem;
   cursor: pointer;
-  user-select: none;
+  display: block;
+  color: black;
 }
 
 .menu {
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
+  margin: 0;
+  display: none;
+  flex-direction: column;
+  background-color: #000;
+  color: white;
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .menu li {
-  margin: 0.5rem 0;
+  padding: 1rem;
+}
+
+.menu li a {
+  color: white;
+  text-decoration: none;
+}
+
+#menuToggle:checked + label + ul {
+  display: flex;
 }
 
 .main {
   flex: 1;
-  padding: 2rem;
+  padding: 1rem;
 }
 
-/* Footer Styles */
 .footer {
   background-color: #000;
-  color: #fff;
+  color: white;
   padding: 2rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 2rem;
 }
 
 .footerColumn {
-  flex: 1 1 250px;
-  min-width: 200px;
+  flex: 1 1 200px;
+  margin: 1rem;
 }
 
 .footerColumn h3,
@@ -62,32 +77,25 @@
   margin-bottom: 0.5rem;
 }
 
-.footerColumn p,
-.footerColumn li {
-  font-size: 0.95rem;
-  line-height: 1.4;
-  margin-bottom: 0.4rem;
-}
-
 .footerColumn ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.footerColumn a {
-  color: #3b82f6;
+.footerColumn ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footerColumn ul li a {
+  color: #00aaff;
   text-decoration: none;
-}
-
-.footerColumn a:hover {
-  text-decoration: underline;
 }
 
 .footerBottom {
   width: 100%;
-  margin-top: 2rem;
   text-align: center;
-  font-size: 0.85rem;
-  border-top: 1px solid #333;
-  padding-top: 1rem;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #ccc;
 }
