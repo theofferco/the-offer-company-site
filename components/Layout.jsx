@@ -30,12 +30,14 @@ export default function Layout({ children }) {
             <h3>The Offer Company</h3>
             <p>A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.</p>
           </div>
+
           <div className={styles.footerColumn}>
             <h4>Contact Us</h4>
             <p><strong>Address:</strong><br />The Offer Company<br />4802 E. Ray Road<br />Phoenix, AZ 85044</p>
             <p><strong>Phone:</strong><br />602-448-7377</p>
             <p><strong>Email:</strong><br />support@theofferco.com</p>
           </div>
+
           <div className={styles.footerColumn}>
             <h4>Quick Links</h4>
             <ul>
@@ -51,7 +53,7 @@ export default function Layout({ children }) {
           </div>
         </div>
         <div className={styles.footerBottom}>
-          © The Offer Company – All rights reserved
+          &copy; The Offer Company – All rights reserved
         </div>
       </footer>
     </div>
