@@ -99,7 +99,7 @@ export default function HomePage() {
           Facing Foreclosure in Arizona? Hope, Our AI Real Estate Assistant, Is Here to Help
         </h1>
         <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
-          Chat privately with Hope — our AI assistant trained by licensed Arizona foreclosure experts. She’ll explain your options, like stopping a trustee sale, applying for a loan mod, or selling your home — with no pressure, no fees, and no uncomfortable conversations.
+          Chat privately with Hope — our AI assistant trained by licensed Arizona foreclosure experts. She’ll explain your options, like stopping a trustee sale, applying for a loan mod, or selling your home — with no pressure, no fees, and no judgement.
         </h2>
 
         {/* Static Blue Button with Inline SVG Mic Icon */}
