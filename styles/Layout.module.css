@@ -1,60 +1,86 @@
-// components/Layout.jsx
-import Link from 'next/link';
-import styles from '../styles/Layout.module.css';
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-export default function Layout({ children }) {
-  return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <nav className={styles.nav}>
-          <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
-          <label htmlFor="menuToggle" className={styles.hamburger}>&#9776;</label>
-          <ul className={styles.menu}>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/why">Why Us</Link></li>
-            <li><Link href="/stories">Real Stories</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
-            <li><Link href="/hope">Talk to Hope</Link></li>
-          </ul>
-        </nav>
-      </header>
+.header {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
 
-      <main className={styles.main}>{children}</main>
+.nav {
+  display: flex;
+  flex-direction: column;
+}
 
-      <footer className={styles.footer}>
-        <div className={styles.footerColumn}>
-          <h3>The Offer Company</h3>
-          <p>A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.</p>
-        </div>
+.menuToggle {
+  display: none;
+}
 
-        <div className={styles.footerColumn}>
-          <h4>Contact Us</h4>
-          <p>The Offer Company</p>
-          <p>4802 E. Ray Road</p>
-          <p>Phoenix, AZ 85044</p>
-          <p>Phone: 602-448-7377</p>
-          <p>Email: support@theofferco.com</p>
-        </div>
+.hamburger {
+  font-size: 1.8rem;
+  cursor: pointer;
+  user-select: none;
+}
 
-        <div className={styles.footerColumn}>
-          <h4>Quick Links</h4>
-          <ul>
-            <li><Link href="/about">About The Offer Company</Link></li>
-            <li><Link href="/why">Why Homeowners Trust Us</Link></li>
-            <li><Link href="/stories">Real Stories</Link></li>
-            <li><Link href="/faq">Frequently Asked Questions</Link></li>
-            <li><Link href="/hope">Back to Hope (AI Assistant)</Link></li>
-            <li><Link href="/privacy">Privacy Policy</Link></li>
-            <li><Link href="/terms">Terms of Use</Link></li>
-            <li><a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">𝕏 @theofferco</a></li>
-          </ul>
-        </div>
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
 
-        <div className={styles.footerBottom}>
-          &copy; The Offer Company – All rights reserved
-        </div>
-      </footer>
-    </div>
-  );
+.menu li {
+  margin: 0.5rem 0;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.footer {
+  background-color: #000;
+  color: #fff;
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footerColumn {
+  flex: 1 1 300px;
+  margin-bottom: 1.5rem;
+}
+
+.footerColumn h3,
+.footerColumn h4 {
+  margin-bottom: 0.5rem;
+}
+
+.footerColumn ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footerColumn li {
+  margin-bottom: 0.25rem;
+}
+
+.footerColumn a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.footerColumn a:hover {
+  text-decoration: underline;
+}
+
+.footerBottom {
+  width: 100%;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #ccc;
 }
