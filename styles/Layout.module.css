@@ -1,3 +1,5 @@
+/* styles/Layout.module.css */
+
 .container {
   display: flex;
   flex-direction: column;
@@ -5,9 +7,8 @@
 }
 
 .header {
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
   padding: 1rem;
-  border-bottom: 1px solid #ddd;
 }
 
 .nav {
@@ -20,7 +21,7 @@
 }
 
 .hamburger {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   cursor: pointer;
   user-select: none;
 }
@@ -28,7 +29,7 @@
 .menu {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
 }
 
 .menu li {
@@ -40,6 +41,7 @@
   padding: 2rem;
 }
 
+/* Footer Styles */
 .footer {
   background-color: #000;
   color: #fff;
@@ -47,11 +49,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  gap: 2rem;
 }
 
 .footerColumn {
-  flex: 1 1 300px;
-  margin-bottom: 1.5rem;
+  flex: 1 1 250px;
+  min-width: 200px;
 }
 
 .footerColumn h3,
@@ -59,13 +62,16 @@
   margin-bottom: 0.5rem;
 }
 
+.footerColumn p,
+.footerColumn li {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+
 .footerColumn ul {
   list-style: none;
   padding: 0;
-}
-
-.footerColumn li {
-  margin-bottom: 0.25rem;
 }
 
 .footerColumn a {
@@ -79,8 +85,9 @@
 
 .footerBottom {
   width: 100%;
-  text-align: center;
   margin-top: 2rem;
-  font-size: 0.9rem;
-  color: #ccc;
+  text-align: center;
+  font-size: 0.85rem;
+  border-top: 1px solid #333;
+  padding-top: 1rem;
 }
