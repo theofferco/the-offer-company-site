@@ -11,6 +11,8 @@
 .header {
   background-color: #1a1a1a;
   padding: 1rem;
+  position: relative;
+  z-index: 999;
 }
 
 .nav {
@@ -23,7 +25,6 @@
   display: block;
   color: white;
   user-select: none;
-  margin-bottom: 0.5rem;
 }
 
 .menuToggle {
@@ -32,10 +33,18 @@
 
 .menu {
   display: none;
+  position: absolute;
+  top: 3.5rem;
+  left: 1rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 1000;
   list-style: none;
-  padding: 0;
-  margin: 0;
   flex-direction: column;
+  width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .menu li {
@@ -52,7 +61,6 @@
   text-decoration: underline;
 }
 
-/* Show menu when checkbox is toggled */
 .menuToggle:checked + label + .menu {
   display: flex;
 }
