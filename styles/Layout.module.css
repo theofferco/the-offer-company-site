@@ -1,65 +1,122 @@
-import Link from 'next/link';
-import styles from '../styles/Layout.module.css';
+/* styles/Layout.module.css */
 
-export default function Layout({ children }) {
-  return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <nav className={styles.nav}>
-          <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
-          <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
-          <ul className={styles.menu}>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/why-us">Why Us</Link></li>
-            <li><Link href="/real-stories">Real Stories</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
-            <li><Link href="/">Talk to Hope</Link></li>
-          </ul>
-        </nav>
-      </header>
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: white;
+}
 
-      <main className={styles.main}>{children}</main>
+.header {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  position: relative;
+  z-index: 999;
+}
 
-      <footer className={styles.footer}>
-        <div className={styles['footer-column']}>
-          <h3>The Offer Company</h3>
-          <p>
-            A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.
-          </p>
-        </div>
+.nav {
+  position: relative;
+}
 
-        <div className={styles['footer-column']}>
-          <h4>Contact Us</h4>
-          <p>The Offer Company</p>
-          <p>4802 E. Ray Road</p>
-          <p>Phoenix, AZ 85044</p>
-          <p>Phone: 602-448-7377</p>
-          <p>Email: support@theofferco.com</p>
-        </div>
+.menuToggle {
+  display: none;
+}
 
-        <div className={styles['footer-column']}>
-          <h4>Quick Links</h4>
-          <ul>
-            <li><Link href="/about">About The Offer Company</Link></li>
-            <li><Link href="/why-us">Why Homeowners Trust Us</Link></li>
-            <li><Link href="/real-stories">Real Stories</Link></li>
-            <li><Link href="/faq">Frequently Asked Questions</Link></li>
-            <li><Link href="/">Back to Hope (AI Assistant)</Link></li>
-            <li><Link href="/privacy">Privacy Policy</Link></li>
-            <li><Link href="/terms">Terms of Use</Link></li>
-            <li>
-              <a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">
-                𝕏 @theofferco
-              </a>
-            </li>
-          </ul>
-        </div>
+.hamburger {
+  font-size: 2rem;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+  display: block;
+}
 
-        <div className={styles['footer-bottom']}>
-          © The Offer Company – All rights reserved
-        </div>
-      </footer>
-    </div>
-  );
+.menu {
+  display: none;
+  position: absolute;
+  top: 3.5rem;
+  left: 1rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 1000;
+  list-style: none;
+  flex-direction: column;
+  width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.menu li {
+  margin: 0.5rem 0;
+}
+
+.menu li a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.menu li a:hover {
+  text-decoration: underline;
+}
+
+.menuToggle:checked + label + .menu {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.footer {
+  background-color: #000;
+  color: #ccc;
+  font-size: 14px;
+  padding: 3rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer h3,
+.footer h4 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.footer p,
+.footer li {
+  margin: 0.25rem 0;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  grid-column: 1 / -1;
+  margin-top: 2rem;
+  border-top: 1px solid #333;
+  padding-top: 1rem;
+  text-align: center;
+  color: #777;
 }
