@@ -1,112 +1,65 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+import Link from 'next/link';
+import styles from '../styles/Layout.module.css';
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #ccc;
-  position: relative;
-  z-index: 10;
-}
+export default function Layout({ children }) {
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <nav className={styles.nav}>
+          <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
+          <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
+          <ul className={styles.menu}>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About</Link></li>
+            <li><Link href="/why-us">Why Us</Link></li>
+            <li><Link href="/real-stories">Real Stories</Link></li>
+            <li><Link href="/faq">FAQ</Link></li>
+            <li><Link href="/">Talk to Hope</Link></li>
+          </ul>
+        </nav>
+      </header>
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #222;
-  text-decoration: none;
-}
+      <main className={styles.main}>{children}</main>
 
-.menuIcon {
-  display: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
+      <footer className={styles.footer}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+            The Offer Company
+          </h3>
+          <p style={{ fontSize: '14px', color: '#555', marginBottom: '1.5rem' }}>
+            A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.
+          </p>
 
-.nav {
-  display: flex;
-  gap: 1.5rem;
-}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '2rem' }}>
+            <div>
+              <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '0.5rem' }}>Contact Us</h4>
+              <p style={{ fontSize: '14px', margin: 0 }}>The Offer Company</p>
+              <p style={{ fontSize: '14px', margin: 0 }}>4802 E. Ray Road</p>
+              <p style={{ fontSize: '14px', margin: 0 }}>Phoenix, AZ 85044</p>
+              <p style={{ fontSize: '14px', margin: '0.5rem 0 0' }}>Phone: 602-448-7377</p>
+              <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}>Email: support@theofferco.com</p>
+            </div>
 
-.nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-}
+            <div>
+              <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '0.5rem' }}>Quick Links</h4>
+              <ul style={{ listStyle: 'none', padding: 0, fontSize: '14px' }}>
+                <li><Link href="/about">About The Offer Company</Link></li>
+                <li><Link href="/why-us">Why Homeowners Trust Us</Link></li>
+                <li><Link href="/real-stories">Real Stories</Link></li>
+                <li><Link href="/faq">Frequently Asked Questions</Link></li>
+                <li><Link href="/">Back to Hope (AI Assistant)</Link></li>
+                <li><Link href="/privacy">Privacy Policy</Link></li>
+                <li><Link href="/terms">Terms of Use</Link></li>
+                <li><a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">𝕏 @theofferco</a></li>
+              </ul>
+            </div>
+          </div>
 
-.main {
-  flex: 1;
-  padding: 2rem;
-}
-
-.footer {
-  background-color: #f5f5f5;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border-top: 1px solid #ccc;
-}
-
-.footerTitle {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.footerText {
-  max-width: 600px;
-  line-height: 1.5;
-}
-
-.footerSection {
-  margin-top: 1rem;
-}
-
-.footerLinks {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.footerLinks a {
-  text-decoration: none;
-  color: #333;
-}
-
-.footerBottom {
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  color: #888;
-}
-
-@media (max-width: 768px) {
-  .menuIcon {
-    display: block;
-  }
-
-  .nav {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: #f5f5f5;
-    flex-direction: column;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #ccc;
-    z-index: 5;
-  }
-
-  .nav.open {
-    display: flex;
-  }
+          <p style={{ fontSize: '13px', color: '#888', marginTop: '2rem' }}>
+            © The Offer Company – All rights reserved
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
 }
