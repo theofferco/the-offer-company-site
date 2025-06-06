@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin
+Disallow: /staging
+Allow: /
+
+Sitemap: https://theofferco.com/sitemap.xml
