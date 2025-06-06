@@ -6,8 +6,10 @@
 }
 
 .header {
-  background-color: #f5f5f5;
+  background-color: #1a1a1a;
   padding: 1rem;
+  color: white;
+  position: relative;
 }
 
 .nav {
@@ -21,55 +23,55 @@
 .hamburger {
   font-size: 1.5rem;
   cursor: pointer;
-  display: block;
-  color: black;
+  color: white;
 }
 
 .menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: none;
-  flex-direction: column;
-  background-color: #000;
-  color: white;
   position: absolute;
-  top: 3rem;
+  top: 2.5rem;
   left: 0;
-  width: 100%;
+  background-color: #111;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 
 .menu li {
-  padding: 1rem;
+  list-style: none;
+  margin: 0.5rem 0;
 }
 
 .menu li a {
-  color: white;
+  color: #3b82f6;
   text-decoration: none;
+  font-weight: 600;
 }
 
-#menuToggle:checked + label + ul {
-  display: flex;
+#menuToggle:checked + label + .menu {
+  display: block;
 }
 
 .main {
   flex: 1;
-  padding: 1rem;
 }
 
 .footer {
   background-color: #000;
   color: white;
   padding: 2rem;
+}
+
+.footerContent {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .footerColumn {
   flex: 1 1 200px;
-  margin: 1rem;
 }
 
 .footerColumn h3,
@@ -80,22 +82,20 @@
 .footerColumn ul {
   list-style: none;
   padding: 0;
-  margin: 0;
 }
 
-.footerColumn ul li {
+.footerColumn li {
   margin-bottom: 0.5rem;
 }
 
-.footerColumn ul li a {
-  color: #00aaff;
+.footerColumn a {
+  color: #3b82f6;
   text-decoration: none;
 }
 
 .footerBottom {
-  width: 100%;
   text-align: center;
   margin-top: 2rem;
   font-size: 0.9rem;
-  color: #ccc;
+  color: #bbb;
 }
