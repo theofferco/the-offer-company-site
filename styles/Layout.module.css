@@ -1,3 +1,5 @@
+/* styles/Layout.module.css */
+
 .container {
   display: flex;
   flex-direction: column;
@@ -5,9 +7,10 @@
 }
 
 .header {
-  background-color: #f5f5f5;
-  padding: 1rem;
+  background: #fff;
+  padding: 0.5rem 1rem;
   position: relative;
+  z-index: 1000;
 }
 
 .nav {
@@ -21,56 +24,61 @@
 .hamburger {
   font-size: 1.5rem;
   cursor: pointer;
-  z-index: 1001;
-  position: relative;
+  color: #000;
+  padding: 0.5rem;
+  display: inline-block;
 }
 
-/* Default hidden menu */
-.menu {
-  display: none;
-  list-style: none;
-  padding: 1rem;
-  margin: 0;
-  background-color: #111;
+.menuOverlay {
   position: absolute;
-  top: 50px;
+  top: 2.5rem;
   left: 0;
-  z-index: 1000;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background-color: #111;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 999;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
 }
 
 .menu li {
-  margin: 0.5rem 0;
+  margin-bottom: 0.5rem;
 }
 
-/* Reveal menu when checkbox is checked */
-.menuToggle:checked + .hamburger + .menu {
+.menu li a {
+  color: #2196f3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.menuToggle:checked + .hamburger + .menuOverlay {
   display: block;
 }
 
 .main {
   flex: 1;
   padding: 2rem;
+  background: linear-gradient(to bottom, #111, #222);
+  color: #fff;
 }
 
-/* Footer styles */
 .footer {
   background-color: #000;
   color: #fff;
-  padding: 2rem 1rem;
+  padding: 2rem;
+  font-size: 0.9rem;
 }
 
 .footerContent {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 2rem;
-}
-
-.footerColumn {
-  flex: 1;
-  min-width: 250px;
 }
 
 .footerColumn h3,
@@ -84,12 +92,18 @@
   margin: 0;
 }
 
-.footerColumn li {
+.footerColumn ul li {
   margin-bottom: 0.4rem;
 }
 
+.footerColumn ul li a {
+  color: #2196f3;
+  text-decoration: none;
+}
+
 .footerBottom {
-  text-align: center;
   margin-top: 2rem;
-  font-size: 0.875rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #aaa;
 }
