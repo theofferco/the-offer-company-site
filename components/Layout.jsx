@@ -7,9 +7,9 @@ export default function Layout({ children }) {
     <div className={styles.container}>
       <header className={styles.header}>
         <nav className={styles.nav}>
-          <div className={styles.menuWrapper}>
-            <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
-            <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
+          <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
+          <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
+          <div className={styles.menuOverlay}>
             <ul className={styles.menu}>
               <li><Link href="/">Home</Link></li>
               <li><Link href="/about">About</Link></li>
