@@ -96,7 +96,7 @@ export default function HomePage() {
           />
         </div>
         <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
-          Facing Foreclosure in Arizona? Get Trusted Help from Hope, Your AI Real Estate Assistant
+          Facing Foreclosure in Arizona? Hope, Our AI Real Estate Assistant, Is Here to Help
         </h1>
         <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
           Chat privately with Hope — our AI assistant trained by licensed Arizona foreclosure experts. She’ll explain your options, like stopping a trustee sale, applying for a loan mod, or selling your home — with no pressure, no fees, and no uncomfortable conversations.
