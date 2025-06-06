@@ -10,59 +10,51 @@ export default function Layout({ children }) {
           <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
           <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
           <ul className={styles.menu}>
-            <li>
-              <Link href="/"><a>Home</a></Link>
-            </li>
-            <li>
-              <Link href="/about"><a>About</a></Link>
-            </li>
-            <li>
-              <Link href="/why"><a>Why Us</a></Link>
-            </li>
-            <li>
-              <Link href="/stories"><a>Real Stories</a></Link>
-            </li>
-            <li>
-              <Link href="/faq"><a>FAQ</a></Link>
-            </li>
-            <li>
-              <Link href="/hope"><a>Talk to Hope</a></Link>
-            </li>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About</Link></li>
+            <li><Link href="/why">Why Us</Link></li>
+            <li><Link href="/stories">Real Stories</Link></li>
+            <li><Link href="/faq">FAQ</Link></li>
+            <li><Link href="/hope">Talk to Hope</Link></li>
           </ul>
         </nav>
       </header>
 
-      <main>{children}</main>
+      <main className={styles.main}>{children}</main>
 
       <footer className={styles.footer}>
-        <p><strong>The Offer Company</strong> — Licensed Real Estate Brokerage</p>
-        <ul>
-          <li>
-            <Link href="/about"><a>About</a></Link>
-          </li>
-          <li>
-            <Link href="/why"><a>Why Us</a></Link>
-          </li>
-          <li>
-            <Link href="/stories"><a>Real Stories</a></Link>
-          </li>
-          <li>
-            <Link href="/faq"><a>FAQ</a></Link>
-          </li>
-          <li>
-            <Link href="/stop-foreclosure"><a>Stop Foreclosure</a></Link>
-          </li>
-          <li>
-            <Link href="/short-sale"><a>Short Sale Help</a></Link>
-          </li>
-          <li>
-            <Link href="/privacy"><a>Privacy Policy</a></Link>
-          </li>
-          <li>
-            <Link href="/terms"><a>Terms of Use</a></Link>
-          </li>
-        </ul>
-        <p>© The Offer Company – All rights reserved</p>
+        <div className={styles.footerContent}>
+          <div className={styles.footerColumn}>
+            <h3>The Offer Company</h3>
+            <p>A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.</p>
+          </div>
+
+          <div className={styles.footerColumn}>
+            <h4>Contact Us</h4>
+            <p>The Offer Company</p>
+            <p>4802 E. Ray Road</p>
+            <p>Phoenix, AZ 85044</p>
+            <p>Phone: 602-448-7377</p>
+            <p>Email: support@theofferco.com</p>
+          </div>
+
+          <div className={styles.footerColumn}>
+            <h4>Quick Links</h4>
+            <ul>
+              <li><Link href="/about">About The Offer Company</Link></li>
+              <li><Link href="/why">Why Homeowners Trust Us</Link></li>
+              <li><Link href="/stories">Real Stories</Link></li>
+              <li><Link href="/faq">Frequently Asked Questions</Link></li>
+              <li><Link href="/hope">Back to Hope (AI Assistant)</Link></li>
+              <li><Link href="/privacy">Privacy Policy</Link></li>
+              <li><Link href="/terms">Terms of Use</Link></li>
+              <li><a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">𝕏 @theofferco</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.footerBottom}>
+          &copy; The Offer Company – All rights reserved
+        </div>
       </footer>
     </div>
   );
