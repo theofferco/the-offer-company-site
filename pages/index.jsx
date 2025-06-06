@@ -1,7 +1,6 @@
-import Layout from '../components/Layout';
-import Head from 'next/head'; // Optional, but good to set homepage meta
 "use client";
-
+import Head from 'next/head';
+import Layout from '../components/Layout';
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
@@ -10,13 +9,13 @@ export default function HomePage() {
   var talkToHopeBtn = null;
   var talkToHopeBtnLabel = null;
   var VapiInstance = null;
-  
+
   const initiateVapiMeeting = () => {
     talkToHopeBtn.children[0].style.display = "none";
     talkToHopeBtn.style.backgroundColor = "#1a9513";
     talkToHopeBtnLabel.textContent = "Connecting...";
     document.getElementById("vapi-support-btn").click();
-  }
+  };
 
   useEffect(() => {
     talkToHopeBtn = document.getElementById("talk-to-hope-btn");
@@ -59,7 +58,7 @@ export default function HomePage() {
 
         VapiInstance.on('call-end', () => {
           talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#3b82f6";          
+          talkToHopeBtn.style.backgroundColor = "#3b82f6";
           talkToHopeBtnLabel.textContent = "Talk to Hope Now";
         });
 
@@ -80,87 +79,85 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main style={{
-      fontFamily: 'Arial, sans-serif',
-      padding: '60px 20px',
-      backgroundColor: '#1a1a1a',
-      color: 'white',
-      minHeight: '100vh',
-      textAlign: 'center',
-      backgroundImage: 'linear-gradient(to bottom, #1a1a1a 0%, #333333 100%)'
-    }}>
-      <section style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img
-            src="/hope-avatar.jpg"
-            alt="Hope Assistant"
-            style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '20px', objectFit: 'cover' }}
-          />
-        </div>
-        <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
-          Facing Foreclosure in Arizona? Hope, Our AI Real Estate Assistant, Is Here to Help
-        </h1>
-        <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
-          Chat privately with Hope — our AI assistant trained by licensed Arizona foreclosure experts. She’ll explain your options, like stopping a trustee sale, applying for a loan mod, or selling your home — with no pressure, no fees, and no judgement.
-        </h2>
+    <Layout>
+      <Head>
+        <title>Facing Foreclosure in Arizona? Talk to Hope Today</title>
+        <meta
+          name="description"
+          content="Talk to Hope, our AI assistant trained by licensed foreclosure experts in Arizona. Get real help with loan mods, short sales, and cash offers — no pressure or fees."
+        />
+      </Head>
 
-        {/* Static Blue Button with Inline SVG Mic Icon */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-          <button
-            id="talk-to-hope-btn"
-            style={{
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              fontSize: '18px',
-              fontWeight: 600,
-              padding: '14px 28px',
-              borderRadius: '30px',
-              border: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-              animation: 'pulse 2s infinite',
-              cursor: 'pointer'
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="20"
-              width="20"
-              viewBox="0 0 24 24"
-              fill="white"
+      <main style={{
+        fontFamily: 'Arial, sans-serif',
+        padding: '60px 20px',
+        backgroundColor: '#1a1a1a',
+        color: 'white',
+        minHeight: '100vh',
+        textAlign: 'center',
+        backgroundImage: 'linear-gradient(to bottom, #1a1a1a 0%, #333333 100%)'
+      }}>
+        <section style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img
+              src="/hope-avatar.jpg"
+              alt="Hope Assistant"
+              style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '20px', objectFit: 'cover' }}
+            />
+          </div>
+          <h1 style={{ fontSize: '38px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.2' }}>
+            Facing Foreclosure in Arizona? Hope, Our AI Real Estate Assistant, Is Here to Help
+          </h1>
+          <h2 style={{ fontSize: '20px', marginBottom: '24px', lineHeight: '1.6', color: '#ccc' }}>
+            Chat privately with Hope — our AI assistant trained by licensed Arizona foreclosure experts. She’ll explain your options, like stopping a trustee sale, applying for a loan mod, or selling your home — with no pressure, no fees, and no judgement.
+          </h2>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <button
+              id="talk-to-hope-btn"
+              style={{
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                fontSize: '18px',
+                fontWeight: 600,
+                padding: '14px 28px',
+                borderRadius: '30px',
+                border: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                animation: 'pulse 2s infinite',
+                cursor: 'pointer'
+              }}
             >
-              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H8v2h8v-2h-3v-2.08A7 7 0 0 0 19 11Z" />
-            </svg>
-            <span id="talk-to-hope-btn-text">Talk to Hope Now</span>
-          </button>
-        </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20"
+                width="20"
+                viewBox="0 0 24 24"
+                fill="white"
+              >
+                <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V20H8v2h8v-2h-3v-2.08A7 7 0 0 0 19 11Z" />
+              </svg>
+              <span id="talk-to-hope-btn-text">Talk to Hope Now</span>
+            </button>
+          </div>
 
-        {error && (
-          <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
-        )}
+          {error && (
+            <p style={{ color: '#ff6b6b', marginTop: '16px', fontSize: '14px' }}>{error}</p>
+          )}
+        </section>
 
-      </section>
-
-      <footer style={{ borderTop: '1px solid #444', paddingTop: '32px', fontSize: '15px', color: '#bbb' }}>
-        <p>The Offer Company</p>
-        <p>4802 E Ray Rd, Phoenix, AZ 85044</p>
-        <p>(602) 448-7377 • support@theofferco.com</p>
-        <p>BR License #652927000</p>
-        <p style={{ marginTop: '10px' }}>
-          Hope is our virtual voice assistant, here to support homeowners in distress 24/7.
-        </p>
-      </footer>
-
-      <style jsx global>{`
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.05); opacity: 0.9; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-      `}</style>
-    </main>
+        <style jsx global>{`
+          @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+        `}</style>
+      </main>
+    </Layout>
   );
 }
