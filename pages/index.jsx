@@ -86,6 +86,52 @@ export default function HomePage() {
           name="description"
           content="Talk to Hope, our AI assistant trained by licensed foreclosure experts in Arizona. Get real help with loan mods, short sales, and cash offers — no pressure or fees."
         />
+        <link rel="canonical" href="https://theofferco.com/" />
+        <meta property="og:title" content="Facing Foreclosure in Arizona? Talk to Hope Today" />
+        <meta property="og:description" content="Hope is an AI assistant trained to help you avoid foreclosure in Arizona. Get cash offers, loan mod support, or short sale help from a licensed team." />
+        <meta property="og:image" content="https://theofferco.com/hope-preview.jpg" />
+        <meta property="og:url" content="https://theofferco.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="ai-content-context" content="AI-powered foreclosure help in Arizona. Licensed real estate experts providing options for loan mods, cash offers, short sales, and staying in your home." />
+
+        {/* Future-proof tracking placeholder */}
+        {/* <script src="your-pixel-code.js" /> */}
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "RealEstateAgent",
+              "name": "The Offer Company",
+              "image": "https://theofferco.com/logo.png",
+              "url": "https://theofferco.com",
+              "telephone": "602-448-7377",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "4802 E. Ray Road",
+                "addressLocality": "Phoenix",
+                "addressRegion": "AZ",
+                "postalCode": "85044",
+                "addressCountry": "US"
+              },
+              "email": "support@theofferco.com",
+              "description": "Licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.",
+              "areaServed": {
+                "@type": "Place",
+                "name": "Maricopa County, Arizona"
+              },
+              "founder": {
+                "@type": "Person",
+                "name": "Anette Brown"
+              },
+              "foundingDate": "2004",
+              "sameAs": [
+                "https://x.com/theofferco"
+              ]
+            })
+          }}
+        />
       </Head>
 
       <main style={{
@@ -101,7 +147,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <img
               src="/hope-avatar.jpg"
-              alt="Hope Assistant"
+              alt="Hope – AI Assistant for Arizona Foreclosure Help"
               style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '20px', objectFit: 'cover' }}
             />
           </div>
