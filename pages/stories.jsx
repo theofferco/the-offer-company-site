@@ -103,7 +103,7 @@ export default function Stories() {
         <h2>Want to See More?</h2>
         <p>
           <a
-            href="https://www.google.com/search?q=The+Offer+Company+Phoenix+reviews"
+            href="https://bit.ly/theofferco-reviews"
             target="_blank"
             rel="noopener noreferrer"
           >
