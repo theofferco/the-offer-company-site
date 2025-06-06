@@ -1,98 +1,89 @@
-/* styles/Layout.module.css */
+"use client";
 
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #1a1a1a;
-  color: #fff;
-}
+import Link from 'next/link';
+import { useState } from 'react';
+import styles from '../styles/Layout.module.css';
 
-.header {
-  background-color: #1a1a1a;
-  padding: 1rem;
-  position: relative;
-  z-index: 999;
-}
+export default function Layout({ children }) {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-.nav {
-  position: relative;
-}
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
 
-.hamburger {
-  font-size: 2rem;
-  cursor: pointer;
-  display: block;
-  color: white;
-  user-select: none;
-}
+  return (
+    <div className={styles.container}>
+      {/* Header */}
+      <header className={styles.header}>
+        <div className={styles.logo}>
+          <Link href="/">The Offer Company</Link>
+        </div>
+        <button
+          className={styles.hamburger}
+          onClick={toggleMenu}
+          aria-label="Toggle navigation menu"
+        >
+          <span className={styles.hamburgerLine}></span>
+          <span className={styles.hamburgerLine}></span>
+          <span className={styles.hamburgerLine}></span>
+        </button>
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+          <Link href="/about" onClick={closeMenu}>About</Link>
+          <Link href="/why-us" onClick={closeMenu}>Why Us</Link>
+          <Link href="/real-stories" onClick={closeMenu}>Real Stories</Link>
+          <Link href="/faq" onClick={closeMenu}>FAQ</Link>
+          <Link href="/privacy" onClick={closeMenu}>Privacy</Link>
+          <Link href="/terms" onClick={closeMenu}>Terms</Link>
+        </nav>
+      </header>
 
-.menuToggle {
-  display: none;
-}
+      {/* Main Content */}
+      <main className={styles.main}>
+        {children}
+      </main>
 
-.menu {
-  display: none;
-  position: absolute;
-  top: 3.5rem;
-  left: 1rem;
-  background-color: #1a1a1a;
-  border: 1px solid #333;
-  padding: 1rem;
-  border-radius: 8px;
-  z-index: 1000;
-  list-style: none;
-  flex-direction: column;
-  width: 200px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+            The Offer Company
+          </h3>
+          <p style={{ fontSize: '14px', color: '#ccc', marginBottom: '1.5rem' }}>
+            A licensed Arizona real estate brokerage specializing in pre-foreclosure and distressed property solutions.
+          </p>
 
-.menu li {
-  margin: 0.5rem 0;
-}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '2rem' }}>
+            {/* Contact Info */}
+            <div>
+              <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '0.5rem' }}>Contact Us</h4>
+              <p style={{ fontSize: '14px', margin: 0 }}>Address:</p>
+              <p style={{ fontSize: '14px', margin: 0 }}>The Offer Company</p>
+              <p style={{ fontSize: '14px', margin: 0 }}>4802 E. Ray Road</p>
+              <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}>Phoenix, AZ 85044</p>
+              <p style={{ fontSize: '14px', margin: 0 }}>Phone: 602-448-7377</p>
+              <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}>Email: support@theofferco.com</p>
+            </div>
 
-.menu li a {
-  color: #3b82f6;
-  text-decoration: none;
-  font-weight: 600;
-}
+            {/* Quick Links */}
+            <div>
+              <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '0.5rem' }}>Quick Links</h4>
+              <ul style={{ listStyle: 'none', padding: 0, fontSize: '14px' }}>
+                <li><Link href="/about">About The Offer Company</Link></li>
+                <li><Link href="/why-us">Why Homeowners Trust Us</Link></li>
+                <li><Link href="/real-stories">Real Stories</Link></li>
+                <li><Link href="/faq">Frequently Asked Questions</Link></li>
+                <li><Link href="/">Back to Hope (AI Assistant)</Link></li>
+                <li><Link href="/privacy">Privacy Policy</Link></li>
+                <li><Link href="/terms">Terms of Use</Link></li>
+                <li><a href="https://x.com/theofferco" target="_blank" rel="noopener noreferrer">𝕏 @theofferco</a></li>
+              </ul>
+            </div>
+          </div>
 
-.menu li a:hover {
-  text-decoration: underline;
-}
-
-.menuToggle:checked + label + .menu {
-  display: flex;
-}
-
-.main {
-  flex: 1;
-}
-
-.footer {
-  background-color: #1a1a1a;
-  padding: 2rem;
-  color: #bbb;
-  font-size: 14px;
-  text-align: center;
-  border-top: 1px solid #333;
-}
-
-.footer ul {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
-}
-
-.footer ul li {
-  margin: 0.3rem 0;
-}
-
-.footer ul li a {
-  color: #3b82f6;
-  text-decoration: none;
-}
-
-.footer ul li a:hover {
-  text-decoration: underline;
+          <p style={{ fontSize: '13px', color: '#888', marginTop: '2rem' }}>
+            © The Offer Company – All rights reserved
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
 }
