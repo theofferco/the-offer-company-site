@@ -9,16 +9,14 @@ export default function Layout({ children }) {
         <nav className={styles.nav}>
           <input type="checkbox" id="menuToggle" className={styles.menuToggle} />
           <label htmlFor="menuToggle" className={styles.hamburger}>☰</label>
-          <div className={styles.menuOverlay}>
-            <ul className={styles.menu}>
-              <li><Link href="/">Home</Link></li>
-              <li><Link href="/about">About</Link></li>
-              <li><Link href="/why">Why Us</Link></li>
-              <li><Link href="/stories">Real Stories</Link></li>
-              <li><Link href="/faq">FAQ</Link></li>
-              <li><Link href="/hope">Talk to Hope</Link></li>
-            </ul>
-          </div>
+          <ul className={styles.menu}>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About</Link></li>
+            <li><Link href="/why">Why Us</Link></li>
+            <li><Link href="/stories">Real Stories</Link></li>
+            <li><Link href="/faq">FAQ</Link></li>
+            <li><Link href="/hope">Talk to Hope</Link></li>
+          </ul>
         </nav>
       </header>
 
