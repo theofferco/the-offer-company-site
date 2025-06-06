@@ -1,3 +1,5 @@
+import Layout from '../components/Layout';
+import Head from 'next/head'; // Optional, but good to set homepage meta
 "use client";
 
 import { useEffect, useState } from 'react';
