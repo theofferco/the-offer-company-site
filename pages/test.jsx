@@ -1,55 +1,29 @@
-import Head from 'next/head';
-import Script from 'next/script';
 import { useEffect } from 'react';
 
-export default function TestVoice() {
+export default function TestPage() {
   useEffect(() => {
-    (async () => {
-      const { createAgent } = await import('@elevenlabs/convai-js');
-      const agent = await createAgent({
-        agentId: 'agent_01jx5mbv45erw9bh6nb3zp6tcz',
-        enableText: false,
-        enableVoice: true,
-        autoStart: false,
+    // Load the ElevenLabs script once when the component mounts
+    const script = document.createElement('script');
+    script.src = 'https://cdn.elevenlabs.io/convai/embed.js';
+    script.async = true;
+    script.onload = () => {
+      window.elevenlabs?.convai?.mount({
+        // Replace with your actual ElevenLabs Project/Agent ID if needed
+        selector: '#convai-widget',
+        props: {
+          agentId: 'your-agent-id', // <-- replace this
+          open: true,
+          position: 'bottom-right',
+        },
       });
-
-      document.getElementById('voice-btn')?.addEventListener('click', () => {
-        agent.toggle();
-      });
-    })();
+    };
+    document.body.appendChild(script);
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>Hope AI – Voice Only</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
-      <div
-        style={{
-          height: '100vh',
-          backgroundColor: '#000',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <button
-          id="voice-btn"
-          style={{
-            width: '100px',
-            height: '100px',
-            borderRadius: '50%',
-            fontSize: '2rem',
-            border: 'none',
-            background: '#fff',
-            cursor: 'pointer',
-            boxShadow: '0 0 20px rgba(255,255,255,0.15)',
-          }}
-        >
-          🎤
-        </button>
-      </div>
-    </>
+    <div style={{ height: '100vh', backgroundColor: '#f5f5f5' }}>
+      <h1 style={{ textAlign: 'center', paddingTop: '2rem' }}>Test Page</h1>
+      <div id="convai-widget"></div>
+    </div>
   );
 }
