@@ -2,81 +2,67 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import { useEffect, useState } from 'react';
+import { useConversation } from '@elevenlabs/react';
 
 export default function HomePage() {
   const [error, setError] = useState(null);
 
   var talkToHopeBtn = null;
   var talkToHopeBtnLabel = null;
-  var VapiInstance = null;
 
-  const initiateVapiMeeting = () => {
-    talkToHopeBtn.children[0].style.display = "none";
-    talkToHopeBtn.style.backgroundColor = "#1a9513";
-    talkToHopeBtnLabel.textContent = "Connecting...";
-    document.getElementById("vapi-support-btn").click();
+  const { status, startSession, endSession } = useConversation({
+    onConnect: () => {
+      talkToHopeBtn.children[0].style.display = "inline-flex";
+      talkToHopeBtn.style.backgroundColor = "#e13211";
+      talkToHopeBtnLabel.textContent = "Disconnect";
+    },
+    onDisconnect: () => {
+      talkToHopeBtn.children[0].style.display = "inline-flex";
+      talkToHopeBtn.style.backgroundColor = "#3b82f6";
+      talkToHopeBtnLabel.textContent = "Talk to Hope Now";
+    },
+    onError: (err) => {
+      console.error("ElevenLabs widget error:", err);
+      setError("Failed to initialize Hope. Please try again later.");
+      talkToHopeBtn.children[0].style.display = "inline-flex";
+      talkToHopeBtn.style.backgroundColor = "#3b82f6";
+      talkToHopeBtnLabel.textContent = "Talk to Hope Now";
+    },
+  });
+
+  const initiateMeeting = async () => {
+    if (status === "connected") {
+      talkToHopeBtn.children[0].style.display = "none";
+      talkToHopeBtn.style.backgroundColor = "#1a9513";
+      talkToHopeBtnLabel.textContent = "Disconnecting...";
+      await endSession();
+    } else {
+      talkToHopeBtn.children[0].style.display = "none";
+      talkToHopeBtn.style.backgroundColor = "#1a9513";
+      talkToHopeBtnLabel.textContent = "Connecting...";
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        await startSession({ agentId: "agent_01jx5mbv45erw9bh6nb3zp6tcz" });
+      } catch (err) {
+        console.error("Error starting conversation:", err);
+        setError("Failed to start conversation with Hope. Please check your microphone permissions and try again.");
+        talkToHopeBtn.children[0].style.display = "inline-flex";
+        talkToHopeBtn.style.backgroundColor = "#3b82f6";
+        talkToHopeBtnLabel.textContent = "Talk to Hope Now";
+      }
+    }
   };
 
   useEffect(() => {
     talkToHopeBtn = document.getElementById("talk-to-hope-btn");
     talkToHopeBtnLabel = document.getElementById("talk-to-hope-btn-text");
 
-    const VapiButtonStyles = document.createElement("style");
-    VapiButtonStyles.type = 'text/css';
-    VapiButtonStyles.innerHTML = `
-      #vapi-support-btn {
-        display: none !important;
-      }
-    `;
-    document.head.appendChild(VapiButtonStyles);
-
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-    script.defer = true;
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      try {
-        VapiInstance = window.vapiSDK.run({
-          apiKey: "65d895f6-2369-402c-a5dd-60c641e22024",
-          assistant: "b6c9fff2-2b35-4048-af69-abac232b03e5",
-          config: {
-            theme: "light",
-            welcomeMessage: "Hello! I’m Hope, your real estate assistant. How can I help you today?",
-            position: "bottom-right",
-          }
-        });
-
-        document.getElementById("talk-to-hope-btn").addEventListener("click", initiateVapiMeeting);
-
-        VapiInstance.on('call-start', () => {
-          talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#e13211";
-          talkToHopeBtnLabel.textContent = "Disconnect";
-        });
-
-        VapiInstance.on('call-end', () => {
-          talkToHopeBtn.children[0].style.display = "inline-flex";
-          talkToHopeBtn.style.backgroundColor = "#3b82f6";
-          talkToHopeBtnLabel.textContent = "Talk to Hope Now";
-        });
-
-      } catch (err) {
-        console.error("Vapi widget init error:", err);
-        setError("Failed to initialize Hope. Please try again later.");
-      }
-    };
-
-    script.onerror = () => {
-      setError("Failed to load Hope. Please try again later.");
-    };
+    talkToHopeBtn.addEventListener("click", initiateMeeting);
 
     return () => {
-      document.body.removeChild(script);
-      document.removeEventListener("click", initiateVapiMeeting);
+      talkToHopeBtn.removeEventListener("click", initiateMeeting);
     };
-  }, []);
+  }, [status]); // Re-add listener if status changes, but since it's stable, it's fine
 
   return (
     <Layout>
